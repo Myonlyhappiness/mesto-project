@@ -1,0 +1,28 @@
+.page{
+	font-family: "Inter", Arial, sans-serif;
+  color: #FFF;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+	max-width: 880px;
+	min-width: 320px;
+	margin: auto;
+	padding: 45px 0 60px;
+	box-sizing: border-box;
+}
+
+@media screen and (max-width: 946px){
+  .page{
+    padding: 45px 19px 60px;
+}
+}
+
+@media screen and (max-width: 730px){
+  .page{
+    padding: 28px 19px 36px;
+}
+}
+  
