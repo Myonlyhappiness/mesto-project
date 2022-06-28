@@ -9,6 +9,7 @@
   background: url(../../../images/profile/add_button_plus.svg) no-repeat center;
   cursor: pointer;
   transition: opacity linear 0.2s;
+  padding: 0;
 }
 
 .profile__add-button:hover {
