@@ -27,4 +27,4 @@
 @import url("../blocks/popup/__container-item/popup__container-item.css");
 @import url("../blocks/popup/__container-button/popup__container-button.css");
 @import url("../blocks/popup/__close-button/popup__close-button.css");
-@import url("../blocks/popup/popup_opened.css");
+@import url("../blocks/popup/_opened/popup_opened.css");
