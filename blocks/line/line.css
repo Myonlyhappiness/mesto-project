@@ -1,3 +1,9 @@
 .line{
 	border-bottom: 1px solid rgba(84,84,84, .7);
 }
+
+@media screen and (max-width: 400px){
+	.line{
+	margin: 0 -19px;
+}
+}
