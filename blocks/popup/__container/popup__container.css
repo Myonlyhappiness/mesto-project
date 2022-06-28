@@ -12,10 +12,16 @@
   box-sizing: border-box;
 }
 
-
 @media screen and (max-width:618px){
   .popup__container{
-    max-width: 282px;
     padding: 25px 22px;
   }
 }
+
+
+@media screen and (max-width:470px){
+  .popup__container{
+    margin: 0 19px;
+  }
+}
+
