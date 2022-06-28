@@ -14,14 +14,10 @@
 	opacity: 0.6;
 }
 
-.profile__info-edit
-
-
 @media screen and (max-width:618px){
 	.profile__info-edit{
 	width: 18px;
 	height: 18px;
   margin-top: 3px;
-	
 }
 }
