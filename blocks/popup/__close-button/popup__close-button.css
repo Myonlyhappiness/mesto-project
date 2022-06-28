@@ -3,7 +3,7 @@ width: 32px;
 height: 32px;  
 border: none;
 background: url("../../../images/popup/close_icon.svg") no-repeat;
-background-size: cover;  
+background-size: contain;  
 position: absolute;
 right:-40px;
 top:-40px; 
