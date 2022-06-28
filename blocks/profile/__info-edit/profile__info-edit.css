@@ -8,6 +8,7 @@
   margin-top: 7px;
   transition: opacity linear 0.2s;
   display: block;
+  padding:0;
 }
 
 .profile__info-edit:hover {
