@@ -12,6 +12,9 @@
   border-radius: 0;
 }
 
+/* явно указан border-radius, так как на ios кнопка автоматически скругляется.
+Так же не забываем обнулять у кнопок padding*/
+
 .profile__info-edit:hover {
   opacity: 0.6;
 }
