@@ -1,7 +1,7 @@
-.element__caption{
-	display: flex;
-	background-color: #FFF;
-	color: #000;
-	border-radius:  0px 0px 10px 10px;
-	justify-content: space-between;
+.element__caption {
+  display: flex;
+  background-color: #fff;
+  color: #000;
+  border-radius: 0px 0px 10px 10px;
+  justify-content: space-between;
 }

@@ -1,6 +1,6 @@
-.popup__container{
+.popup__container {
   position: absolute;
-  background-color: #FFF;
+  background-color: #fff;
   left: 0;
   right: 0;
   top: 50vh;
@@ -13,16 +13,14 @@
   box-sizing: border-box;
 }
 
-@media screen and (max-width:618px){
-  .popup__container{
+@media screen and (max-width: 618px) {
+  .popup__container {
     padding: 25px 22px;
   }
 }
 
-
-@media screen and (max-width:470px){
-  .popup__container{
+@media screen and (max-width: 470px) {
+  .popup__container {
     margin: 0 19px;
   }
 }
-

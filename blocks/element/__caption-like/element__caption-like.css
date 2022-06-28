@@ -1,26 +1,19 @@
-.element__caption-like{
-	margin-right: 15px;
-	align-self: center;
-	cursor: pointer;
-	transition: opacity linear 0.2s;
-	background: url(../../../images/elements/like_disable.svg) no-repeat;
-	border:none;
-	width:22px;
-	padding: 0;
+.element__caption-like {
+  margin-right: 15px;
+  align-self: center;
+  cursor: pointer;
+  transition: opacity linear 0.2s;
+  background: url(../../../images/elements/like_disable.svg) no-repeat;
+  border: none;
+  width: 22px;
+  padding: 0;
 }
 
-.element__caption-like:hover{
-	opacity: 0.5;
-}
-                  
-
-.element__caption-like:active{
-	background: url(../../../images/elements/like_active.svg) no-repeat;
-	opacity: 1;
+.element__caption-like:hover {
+  opacity: 0.5;
 }
 
-
-
-
-
-
+.element__caption-like:active {
+  background: url(../../../images/elements/like_active.svg) no-repeat;
+  opacity: 1;
+}
