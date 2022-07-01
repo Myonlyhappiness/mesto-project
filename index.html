@@ -11,78 +11,79 @@
   <body class="general">
     <div class="page">
       <header class="header">
-        <img src="images/header/logo.png" class="header__logo" alt="Логотип страницы Mesto">
-        <div class="line"></div>
+        <img src="images/header/logo.svg" class="header__logo" alt="Логотип страницы Mesto">
       </header>
       <main class="content">
         <section class="profile">
           <img src="images/profile/avatar.jpg" class="profile__avatar" alt="Аватар профиля">
           <div class="profile__info">
-            <h1 class=profile__name>Жак-Ив Кусто</h1>
-            <input class="profile__info-edit" type="button" value=" " name="edit">
+            <h1 class="profile__name">Жак-Ив Кусто</h1>
+            <button class="profile__info-edit" type="button" value="edit" name="edit"></button>
             <p class=profile__job-info>Исследователь океана</p>
           </div>
-          <input type="button" name="add" value=" " class="profile__add-button">
-          <div class="popup">
-            <form class="popup__container">
-              <input type="button" value=" " name="close" class="popup__close-button">
-              <p class="popup__container-title">Редактировать профиль</p>
-              <fieldset class="popup__input-container">
-                <input class="popup__container-item" id="name" type="text" name="name" placeholder="Жак-Ив Кусто" required>
-                <input class="popup__container-item" id="job" type="text" name="name" placeholder="Исследователь океана" required>
-                <input class="popup__container-button" type="submit" value="Сохранить">
-              </fieldset>
-            </form>
-          </div>
+          <button type="button" name="add" value="add" class="profile__add-button"></button>
         </section>
-        <div class="elements">
+        <section class="elements">
           <article class="element">
-            <img class="element__photo" src="images/elements/Karachaevsk.jpg" alt="Пейзаж">
+            <img class="element__photo" src="images/elements/Karachaevsk.jpg" alt="Заброшенная каменная церковь в горах">
             <div class="element__caption">
               <h2 class="element__caption-text">Карачаевск</h2>
-              <input type="button" name="like" value=" " class="element__caption-like">
+              <button type="button" name="like" value="like" class="element__caption-like"></button>
             </div>
           </article>
           <article class="element">
-            <img class="element__photo" src="images/elements/Elbrus.jpg" alt="Пейзаж">
+            <img class="element__photo" src="images/elements/Elbrus.jpg" alt="Вид на гору Эльбрус">
             <div class="element__caption">
               <h2 class="element__caption-text">Гора Эльбрус</h2>
-              <input type="button" name="like" value=" " class="element__caption-like">
+              <button type="button" name="like" value="like" class="element__caption-like"></button>
             </div>
           </article>
           <article class="element">
-            <img class="element__photo" src="images/elements/Dombai.jpg" alt="Пейзаж">
+            <img class="element__photo" src="images/elements/Dombai.jpg" alt="Вид на гору в местечке Домбай">
             <div class="element__caption">
               <h2 class="element__caption-text">Домбай</h2>
-              <input type="button" name="like" value=" " class="element__caption-like">
+              <button type="button" name="like" value="like" class="element__caption-like"></button>
             </div>
           </article>
           <article class="element">
-            <img class="element__photo" src="images/elements/Elbrus.jpg" alt="Пейзаж">
+            <img class="element__photo" src="images/elements/Elbrus.jpg" alt="Вид на гору Эльбрус">
             <div class="element__caption">
               <h2 class="element__caption-text">Гора Эльбрус</h2>
-              <input type="button" name="like" value=" " class="element__caption-like">
+              <button type="button" name="like" value="like" class="element__caption-like"></button>
             </div>
           </article>
           <article class="element">
-            <img class="element__photo" src="images/elements/Dombai.jpg" alt="Пейзаж">
+            <img class="element__photo" src="images/elements/Dombai.jpg" alt="Вид на гору в местечке Домбай">
             <div class="element__caption">
               <h2 class="element__caption-text">Домбай</h2>
-              <input type="button" name="like" value=" " class="element__caption-like">
+              <button type="button" name="like" value="like" class="element__caption-like"></button>
             </div>
           </article>
           <article class="element">
-            <img class="element__photo" src="images/elements/Karachaevsk.jpg" alt="Пейзаж">
+            <img class="element__photo" src="images/elements/Karachaevsk.jpg" alt="Заброшенная каменная церковь в горах">
             <div class="element__caption">
               <h2 class="element__caption-text">Карачаево-Черкесия</h2>
-              <input type="button" name="like" value=" " class="element__caption-like">
+              <button type="button" name="like" value="like" class="element__caption-like"></button>
             </div>
           </article>
-        </div>
+        </section>
       </main>
       <footer class="footer">
-        <p class="footer__copywrite">© 2020 Mesto Russia</p>
+        <p class="footer__copywrite">&copy; 2020 Mesto Russia</p>
       </footer>
+      <div class="popup">
+        <div class="popup__container">
+          <form class="form-edit" name="form-edit">
+            <button type="button" value="close" name="close" class="popup__close-button"></button>
+            <h2 class="popup__container-title">Редактировать профиль</h2>
+            <fieldset class="popup__input-container">
+              <input class="popup__container-item" id="name" type="text" name="name" placeholder="Укажите ваше имя" required>
+              <input class="popup__container-item" id="job" type="text" name="job" placeholder="Кто вы?" required>
+              <button class="popup__container-button" value="save" name="save">Сохранить</button>
+            </fieldset>
+          </form>
+        </div>
+      </div>
     </div>
   </body>
 </html>

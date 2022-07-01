@@ -1,9 +1,0 @@
-.line {
-  border-bottom: 1px solid rgba(54, 54, 54, 0.7);
-}
-
-@media screen and (max-width: 400px) {
-  .line {
-    margin: 0 -19px;
-  }
-}

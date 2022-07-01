@@ -5,4 +5,19 @@
   line-height: 1.2;
   color: #545454;
   margin: 0;
+  padding: 0;
+}
+
+
+@media screen and (max-width: 618px){
+ .footer__copywrite {
+ font-size: 14px;
+  line-height: 1.2;
+}
+}
+
+@media screen and (max-width:400px){
+ .footer__copywrite {
+ padding: 0 19px;
+}
 }
