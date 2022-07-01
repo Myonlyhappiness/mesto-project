@@ -6,9 +6,9 @@
   max-width: 880px;
 }
 
-@media screen and (max-width: 618px){
+@media screen and (max-width: 637px){
   .elements {
-  grid-template-columns: repeat(auto-fit, minmax(282px, 350px));
+  grid-template-columns: repeat(auto-fit, minmax(282px, 400px));
   justify-content:center;  
 }
 }
