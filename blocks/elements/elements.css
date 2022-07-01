@@ -6,10 +6,21 @@
   max-width: 880px;
 }
 
+@media screen and (max-width: 618px){
+  .elements {
+  grid-template-columns: repeat(auto-fit, minmax(282px, 350px));
+  justify-content:center;  
+}
+}
+
+
+
 @media screen and (max-width: 400px){
   .elements {
   padding: 36px 19px 0;
 }
 }
+
+
 
 
