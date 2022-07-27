@@ -1,16 +1,16 @@
-.popup__img-wrapper{
+.popup__img-wrapper {
   position: relative;
   margin: auto;
 }
 
-@media screen and (max-width:760px){
-  .popup__img-wrapper{ 
- margin: auto 100px;
+@media screen and (max-width: 760px) {
+  .popup__img-wrapper {
+    margin: auto 100px;
   }
 }
 
-@media screen and (max-width:500px){
-  .popup__img-wrapper{ 
- margin: auto 40px;
+@media screen and (max-width: 500px) {
+  .popup__img-wrapper {
+    margin: auto 40px;
   }
 }

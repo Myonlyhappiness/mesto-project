@@ -6,21 +6,15 @@
   max-width: 880px;
 }
 
-@media screen and (max-width: 637px){
+@media screen and (max-width: 637px) {
   .cards {
-  grid-template-columns: repeat(auto-fit, minmax(282px, 400px));
-  justify-content:center;
+    grid-template-columns: repeat(auto-fit, minmax(282px, 400px));
+    justify-content: center;
+  }
 }
-}
 
-
-
-@media screen and (max-width: 400px){
+@media screen and (max-width: 400px) {
   .cards {
-  padding: 36px 19px 0;
+    padding: 36px 19px 0;
+  }
 }
-}
-
-
-
-
