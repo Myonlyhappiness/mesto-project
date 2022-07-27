@@ -1,4 +1,4 @@
-.elements {
+.cards {
   padding: 46px 0 0;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(282px, 1fr));
@@ -7,16 +7,16 @@
 }
 
 @media screen and (max-width: 637px){
-  .elements {
+  .cards {
   grid-template-columns: repeat(auto-fit, minmax(282px, 400px));
-  justify-content:center;  
+  justify-content:center;
 }
 }
 
 
 
 @media screen and (max-width: 400px){
-  .elements {
+  .cards {
   padding: 36px 19px 0;
 }
 }

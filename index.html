@@ -23,67 +23,46 @@
           </div>
           <button type="button" name="add" value="add" class="profile__add-button"></button>
         </section>
-        <section class="elements">
-          <article class="element">
-            <img class="element__photo" src="images/elements/Karachaevsk.jpg" alt="Заброшенная каменная церковь в горах">
-            <div class="element__caption">
-              <h2 class="element__caption-text">Карачаевск</h2>
-              <button type="button" name="like" value="like" class="element__caption-like"></button>
-            </div>
-          </article>
-          <article class="element">
-            <img class="element__photo" src="images/elements/Elbrus.jpg" alt="Вид на гору Эльбрус">
-            <div class="element__caption">
-              <h2 class="element__caption-text">Гора Эльбрус</h2>
-              <button type="button" name="like" value="like" class="element__caption-like"></button>
-            </div>
-          </article>
-          <article class="element">
-            <img class="element__photo" src="images/elements/Dombai.jpg" alt="Вид на гору в местечке Домбай">
-            <div class="element__caption">
-              <h2 class="element__caption-text">Домбай</h2>
-              <button type="button" name="like" value="like" class="element__caption-like"></button>
-            </div>
-          </article>
-          <article class="element">
-            <img class="element__photo" src="images/elements/Elbrus.jpg" alt="Вид на гору Эльбрус">
-            <div class="element__caption">
-              <h2 class="element__caption-text">Гора Эльбрус</h2>
-              <button type="button" name="like" value="like" class="element__caption-like"></button>
-            </div>
-          </article>
-          <article class="element">
-            <img class="element__photo" src="images/elements/Dombai.jpg" alt="Вид на гору в местечке Домбай">
-            <div class="element__caption">
-              <h2 class="element__caption-text">Домбай</h2>
-              <button type="button" name="like" value="like" class="element__caption-like"></button>
-            </div>
-          </article>
-          <article class="element">
-            <img class="element__photo" src="images/elements/Karachaevsk.jpg" alt="Заброшенная каменная церковь в горах">
-            <div class="element__caption">
-              <h2 class="element__caption-text">Карачаево-Черкесия</h2>
-              <button type="button" name="like" value="like" class="element__caption-like"></button>
-            </div>
-          </article>
+        <section class="cards">
         </section>
       </main>
       <footer class="footer">
         <p class="footer__copywrite">&copy; 2020 Mesto Russia</p>
       </footer>
       <div class="popup">
+        <div class="popup__img-wrapper">
+          <img src="#" class="popup__img-elem">
+          <button type="button" value="close" name="close" class="popup__close-button"></button>
+          <p class="popup__img-caption"></p>
+        </div>
+      </div>
+      <div class="popup popup-edit">
         <div class="popup__container">
-          <form class="form-edit" name="form-edit">
+          <form class="form" name="edit">
             <button type="button" value="close" name="close" class="popup__close-button"></button>
             <h2 class="popup__container-title">Редактировать профиль</h2>
             <fieldset class="popup__input-container">
-              <input class="popup__container-item" id="name" type="text" name="name" placeholder="Укажите ваше имя" required>
-              <input class="popup__container-item" id="job" type="text" name="job" placeholder="Кто вы?" required>
+              <input class="popup__container-item" maxlength="50" id="name" type="text" name="name" placeholder="Укажите ваше имя" required>
+              <input class="popup__container-item" maxlength="70" id="job" type="text" name="job" placeholder="Кто вы?" required>
               <button class="popup__container-button" value="save" name="save" type="submit">Сохранить</button>
             </fieldset>
           </form>
         </div>
       </div>
+      <div class="popup popup-add-card">
+        <div class="popup__container">
+          <form class="form" name="add">
+            <button type="button" value="close" name="close" class="popup__close-button"></button>
+            <h2 class="popup__container-title">Новое Место</h2>
+            <fieldset class="popup__input-container">
+              <input class="popup__container-item" id="image" type="text" name="image" placeholder="Название">
+              <input class="popup__container-item" id="link" type="text" name="link" placeholder="Ссылка на картинку">
+              <button class="popup__container-button" value="create" name="create" type="submit">Создать</button>
+            </fieldset>
+          </form>
+        </div>
+      </div>
     </div>
+    <script src="js/script.js"></script>
   </body>
 </html>
