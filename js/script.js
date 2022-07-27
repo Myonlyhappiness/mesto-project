@@ -1,4 +1,4 @@
-//работа с DOM
+//Работа с DOM
 const cards = document.querySelector(".cards");
 const popup = document.querySelector(".popup");
 const profileEditButton = document.querySelector(".profile__info-edit");
@@ -12,6 +12,8 @@ const popupNameField = popupEdit.querySelector("#name");
 const popupJobField = popupEdit.querySelector("#job");
 const profileAddButton = document.querySelector(".profile__add-button");
 const likeButton = document.querySelectorAll(".card__like-icon");
+
+//Массив с исходными карточками
 const initialCards = [
   {
     name: "Архыз",
@@ -78,7 +80,7 @@ initialCards.forEach(function (item) {
   createCard(link, name);
 });
 
-//функция открытия и закрытия попапов
+//Функция открытия и закрытия попапов
 function popups(event) {
   if (
     (event.target.classList.contains("popup__close-button") &&
@@ -102,7 +104,6 @@ function popups(event) {
 }
 
 //Закрытие попапов по кнопке ESC
-
 document.addEventListener("keydown", function (event) {
   if (event.key === "Escape") {
     popupEdit.classList.remove("popup_opened");
@@ -112,8 +113,7 @@ document.addEventListener("keydown", function (event) {
   }
 });
 
-//функции обработки форм
-
+//Функции обработки форм
 function editProfile(event) {
   event.preventDefault();
   profileName.textContent = popupNameField.value;
