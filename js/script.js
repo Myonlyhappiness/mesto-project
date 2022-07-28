@@ -127,9 +127,7 @@ function editProfile(event) {
 function addCard(event) {
   event.preventDefault();
   cards.prepend(createCard(formAddCardLink.value, formAddCardName.value));
-  formAdd.reset();
-  popupAddCard.classList.remove("popup_opened");
-  document.querySelector(".general").style.overflow = "scroll";
+  closesPopup();
 }
 
 //Слушатели событий
