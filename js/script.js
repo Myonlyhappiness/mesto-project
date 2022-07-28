@@ -1,7 +1,7 @@
 //Работа с DOM
 const general = document.querySelector(".general");
 const cards = document.querySelector(".cards");
-const popup =document.querySelectorAll(".popup");
+const popup = document.querySelectorAll(".popup");
 const profileEditButton = document.querySelector(".profile__info-edit");
 const formButtons = document.querySelectorAll(".popup__container-button");
 const popupCloseButtons = document.querySelectorAll(".popup__close-button");
@@ -88,10 +88,10 @@ initialCards.forEach((item) => {
 function opensPopup(popup) {
   general.style.overflow = "hidden";
   document.addEventListener("keydown", () => closePopupEsc(popup));
-  if (popup.classList.contains('popup-img')){
+  if (popup.classList.contains("popup-img")) {
     popup.classList.add("popup_img-opened");
-  }
-   else {popup.classList.add("popup_opened");
+  } else {
+    popup.classList.add("popup_opened");
   }
 }
 
@@ -99,19 +99,19 @@ function opensPopup(popup) {
 function closesPopup(popup) {
   general.style.overflow = "scroll";
   document.removeEventListener("keydown", () => closePopupEsc(popup));
-  if (popup.classList.contains('popup-img')){
+  if (popup.classList.contains("popup-img")) {
     popup.classList.remove("popup_img-opened");
-  }
-   else {popup.classList.remove("popup_opened");
+  } else {
+    popup.classList.remove("popup_opened");
   }
 }
 
 //Функция закрытия попапов по ESC
-  function closePopupEsc(popup) {
-    if (event.key === "Escape") {
-      closesPopup(popup);
-    }
+function closePopupEsc(popup) {
+  if (event.key === "Escape") {
+    closesPopup(popup);
   }
+}
 
 //Функции обработки форм
 function editProfile(event) {
@@ -134,10 +134,14 @@ profileEditButton.addEventListener("click", () => {
   popupJobField.value = profileJobInfo.textContent;
   opensPopup(popupEdit);
 });
-profileAddButton.addEventListener("click", () => opensPopup(popupAddCard));
+
+profileAddButton.addEventListener("click", () => {
+  formAdd.reset();
+  opensPopup(popupAddCard);
+});
 
 popup.forEach((popup) =>
-popup.querySelector(".popup__close-button").addEventListener("click", () => closesPopup(popup))
+  popup.querySelector(".popup__close-button").addEventListener("click", () => closesPopup(popup))
 );
 
 formEdit.addEventListener("submit", editProfile);
