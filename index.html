@@ -24,14 +24,24 @@
           <button type="button" name="add" value="add" class="profile__add-button"></button>
         </section>
         <section class="cards">
+          <template id="element">
+            <article class="card">
+              <img class="card__photo" src="https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg" alt="Байкал">
+              <button class="card__delete-icon"></button>
+              <div class="card__caption">
+                <h2 class="card__caption-text">Байкал</h2>
+                <button class="card__like-icon"></button>
+            </div>
+          </article>
+        </template>
         </section>
       </main>
       <footer class="footer">
         <p class="footer__copywrite">&copy; 2020 Mesto Russia</p>
       </footer>
-      <div class="popup">
+      <div class="popup popup-img">
         <div class="popup__img-wrapper">
-          <img src="#" class="popup__img-elem">
+          <img src="#" class="popup__img-elem" alt="">
           <button type="button" value="close" name="close" class="popup__close-button"></button>
           <p class="popup__img-caption"></p>
         </div>
@@ -55,7 +65,7 @@
             <button type="button" value="close" name="close" class="popup__close-button"></button>
             <h2 class="popup__container-title">Новое Место</h2>
             <fieldset class="popup__input-container">
-              <input class="popup__container-item" id="image" type="text" name="image" placeholder="Название">
+              <input class="popup__container-item" id="image" type="text" name="name" placeholder="Название">
               <input class="popup__container-item" id="link" type="text" name="link" placeholder="Ссылка на картинку">
               <button class="popup__container-button" value="create" name="create" type="submit">Создать</button>
             </fieldset>
