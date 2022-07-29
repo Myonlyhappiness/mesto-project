@@ -88,22 +88,14 @@ initialCards.forEach((item) => {
 function opensPopup(popup) {
   general.style.overflow = "hidden";
   document.addEventListener("keydown", () => closePopupEsc(popup));
-  if (popup.classList.contains("popup-img")) {
-    popup.classList.add("popup_img-opened");
-  } else {
-    popup.classList.add("popup_opened");
-  }
+  popup.classList.add("popup_opened");
 }
 
 //Функция закрытия попапов
 function closesPopup(popup) {
-  general.style.overflow = "scroll";
+  general.style.overflow = "";
   document.removeEventListener("keydown", () => closePopupEsc(popup));
-  if (popup.classList.contains("popup-img")) {
-    popup.classList.remove("popup_img-opened");
-  } else {
-    popup.classList.remove("popup_opened");
-  }
+  popup.classList.remove("popup_opened");
 }
 
 //Функция закрытия попапов по ESC
@@ -124,9 +116,11 @@ function editProfile(event) {
 function addCard(event) {
   event.preventDefault();
   cards.prepend(createCard(formAddCardLink.value, formAddCardName.value));
-  formAdd.reset();
   closesPopup(popupAddCard);
 }
+/* У меня очистка зачем-то еще и при открытии стоит.
+Даже передвинув за функцию видна очистка из-за плавного transition
+Решил оставить только на открытии. В таком случае точно не видно */
 
 //Слушатели событий
 profileEditButton.addEventListener("click", () => {
