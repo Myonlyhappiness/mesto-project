@@ -84,25 +84,26 @@ initialCards.forEach((item) => {
   cards.prepend(createCard(link, name));
 });
 
+
 //Функция открытия попапов
 function opensPopup(popup) {
   general.style.overflow = "hidden";
-  document.addEventListener("keydown", () => closePopupEsc(popup));
   popup.classList.add("popup_opened");
+  document.addEventListener("keydown", closePopupEsc);
+}
+
+//Функция закрытия попапов по ESC
+function closePopupEsc(){
+  if (event.key === "Escape") {
+    closesPopup(document.querySelector(".popup_opened"));
+  }
 }
 
 //Функция закрытия попапов
 function closesPopup(popup) {
   general.style.overflow = "";
-  document.removeEventListener("keydown", () => closePopupEsc(popup));
   popup.classList.remove("popup_opened");
-}
-
-//Функция закрытия попапов по ESC
-function closePopupEsc(popup) {
-  if (event.key === "Escape") {
-    closesPopup(popup);
-  }
+  document.removeEventListener("keydown", closePopupEsc);
 }
 
 //Функции обработки форм
@@ -113,6 +114,7 @@ function editProfile(event) {
   closesPopup(popupEdit);
 }
 
+//Функция добавление карточки
 function addCard(event) {
   event.preventDefault();
   cards.prepend(createCard(formAddCardLink.value, formAddCardName.value));
