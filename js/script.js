@@ -52,14 +52,14 @@ const initialCards = [
 // Создание карточки
 function createCard(link, name) {
   const template = document.querySelector("#element").content;
-  const element = template.querySelector(".card").cloneNode(true);
-  element.querySelector(".card__photo").src = link;
-  element.querySelector(".card__photo").alt = name;
-  element.querySelector(".card__caption-text").textContent = name;
-  element.addEventListener("click", likeCard);
-  element.addEventListener("click", deleteCard);
-  element.addEventListener("click", imgCard);
-  return element;
+  const card = template.querySelector(".card").cloneNode(true);
+  card.querySelector(".card__photo").src = link;
+  card.querySelector(".card__photo").alt = name;
+  card.querySelector(".card__caption-text").textContent = name;
+  card.addEventListener("click", likeCard);
+  card.addEventListener("click", deleteCard);
+  card.addEventListener("click", imgCard);
+  return card;
 }
 
 // Создание карточки на основе массива при загрузке страницы
@@ -89,9 +89,9 @@ function imgCard() {
 function deleteCard() {
   event.target.classList.contains("card__delete-icon")
     ? (cards.removeChild(event.target.closest(".card")),
-      element.removeEventListener("click", likeCard),
-      element.removeEventListener("click", deleteCard),
-      element.removeEventListener("click", imgCard))
+    event.target.closest(".card").removeEventListener("click", likeCard),
+    event.target.closest(".card").removeEventListener("click", deleteCard),
+    event.target.closest(".card").removeEventListener("click", imgCard))
     : false;
 }
 
