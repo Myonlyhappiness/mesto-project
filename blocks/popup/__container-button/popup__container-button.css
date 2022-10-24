@@ -9,9 +9,10 @@
   font-size: 18px;
   line-height: 1.2;
   cursor: pointer;
+  border: 1px solid #000000;
   border-radius: 2px;
   transition: background-color linear 0.2s;
-  margin-top: 48px;
+  margin-top: 13px;
 }
 
 .popup__container-button:hover {

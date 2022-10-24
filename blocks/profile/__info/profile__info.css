@@ -3,9 +3,8 @@
   display: grid;
   grid-template-columns: minmax(min-content, max-content) 1fr;
   align-items: center;
-  gap: 18px;
+  gap: 8px 19px;
   align-content:center;
-  margin-top:7px;
 }
 
 

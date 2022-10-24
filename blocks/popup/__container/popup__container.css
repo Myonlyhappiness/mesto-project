@@ -7,9 +7,9 @@
   border-radius: 10px;
   max-width: 430px;
   min-width: 280px;
-  max-height: 335px;
-  padding: 34px 36px 37px;
+  padding: 36px;
   box-sizing: border-box;
+  width:100%;
 }
 
 @media screen and (max-width: 618px) {

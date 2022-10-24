@@ -14,10 +14,10 @@ const popupNameField = popupEdit.querySelector("#name");
 const popupJobField = popupEdit.querySelector("#job");
 const profileAddButton = document.querySelector(".profile__add-button");
 const likeButton = document.querySelectorAll(".card__like-icon");
-const formAddCardLink = document.forms.add.elements.link;
-const formAddCardName = document.forms.add.elements.name;
 const formEdit = document.forms.edit;
 const formAdd = document.forms.add;
+const formAddCardLink = formAdd.elements.link;
+const formAddCardName = formAdd.elements.name;
 const popupImgElem = document.querySelector(".popup__img-elem");
 const popupImgCaption = document.querySelector(".popup__img-caption");
 
@@ -56,9 +56,6 @@ function createCard(link, name) {
   card.querySelector(".card__photo").src = link;
   card.querySelector(".card__photo").alt = name;
   card.querySelector(".card__caption-text").textContent = name;
-  card.addEventListener("click", likeCard);
-  card.addEventListener("click", deleteCard);
-  card.addEventListener("click", imgCard);
   return card;
 }
 
@@ -88,53 +85,144 @@ function imgCard() {
 // Функция обработки клика по иконке удаления
 function deleteCard() {
   event.target.classList.contains("card__delete-icon")
-    ? (cards.removeChild(event.target.closest(".card")),
-    event.target.closest(".card").removeEventListener("click", likeCard),
-    event.target.closest(".card").removeEventListener("click", deleteCard),
-    event.target.closest(".card").removeEventListener("click", imgCard))
-    : false;
+    ? cards.removeChild(event.target.closest(".card")) : false;
+}
+
+//Функция показа ошибки
+function showInputError(fieldsetItem, inputItem, settings, errorMessage) {
+  const errorElement = fieldsetItem.querySelector(`.${inputItem.id}-input-error`);
+  inputItem.classList.add(settings['inputErrorClass']);
+  errorElement.classList.add(settings['inputErrorActiveClass']);
+  errorElement.textContent = errorMessage;
+}
+
+//Функция удаления ошибки
+function hideInputError(fieldsetItem, inputItem, settings) {
+  const errorElement = fieldsetItem.querySelector(`.${inputItem.id}-input-error`);
+  inputItem.classList.remove(settings['inputErrorClass']);
+  errorElement.classList.remove(settings['inputErrorActiveClass']);
+  errorElement.textContent = ' ';
+}
+
+//Функция валидации
+function checkInputValidity(fieldsetItem, inputItem, settings) {
+inputItem.validity.patternMismatch ? inputItem.setCustomValidity(inputItem.dataset.errorMessage):
+inputItem.setCustomValidity("");
+
+!inputItem.validity.valid ? showInputError(fieldsetItem, inputItem, settings, inputItem.validationMessage):
+hideInputError(fieldsetItem, inputItem, settings);
+}
+
+//Функция проверки всех полей
+function hasInvalidInput(inputList) {
+  return inputList.some((item) => !item.validity.valid);
+}
+
+
+//Функция валидации(переключения) кнопки
+function toggleButtonState(inputList, buttonElement, settings) {
+  hasInvalidInput(inputList) ? (buttonElement.classList.add(settings['buttonInactiveClass']),
+  buttonElement.disabled = true):
+  (buttonElement.classList.remove(settings['buttonInactiveClass']), buttonElement.disabled = false);
+}
+
+
+//Функция установки слушателей на поля ввода
+function setEventListeners(fieldsetItem, settings) {
+  const inputList = Array.from(fieldsetItem.querySelectorAll(settings['inputSelector']));
+  const buttonElement = fieldsetItem.querySelector(settings['buttonSelector']);
+  toggleButtonState(inputList, buttonElement, settings);
+  inputList.forEach((inputItem) => {
+    inputItem.addEventListener('input', function () {
+      checkInputValidity(fieldsetItem, inputItem, settings);
+      toggleButtonState(inputList, buttonElement, settings);
+    });
+  });
+}
+
+
+// Функция запуска валидации
+function enableValidation(settings){
+const formList = Array.from(document.querySelectorAll(settings['formSelector']));
+  formList.forEach((formElement) => {
+    formElement.addEventListener('submit', function (evt) {
+      evt.preventDefault();
+    });
+    const fieldsetList = Array.from(formElement.querySelectorAll(settings['fieldsetSelector']));
+    fieldsetList.forEach((fieldsetItem) => setEventListeners(fieldsetItem, settings));
+  });
+}
+
+// Функция сброса ошибок полей
+
+function resetInputsErrors() {
+  Array.from(document.querySelectorAll('.popup__container-item-error_active')).forEach((item) => {
+    item.classList.remove('popup__container-item-error_active');
+    item.textContent = '';
+  })
+
+  Array.from(document.querySelectorAll('.popup__container-item-error')).forEach((item) => {
+    item.classList.remove('popup__container-item-error');
+  })
 }
 
 //Функция открытия попапов
 function opensPopup(popup) {
+  resetInputsErrors();
   general.style.overflow = "hidden";
   popup.classList.add("popup_opened");
+  popup.addEventListener("click", closePopupClick);
   document.addEventListener("keydown", closePopupEsc);
+  enableValidation({
+    formSelector:'.form',
+    fieldsetSelector: '.popup__input-container',
+    inputSelector: '.popup__container-item',
+    inputErrorClass: 'popup__container-item-error',
+    inputErrorActiveClass: 'popup__container-item-error_active',
+    buttonSelector: '.popup__container-button',
+    buttonInactiveClass: 'popup__container-button_inactive'
+  });
 }
 
 //Функция закрытия попапов по ESC
 function closePopupEsc() {
-  if (event.key === "Escape") {
-    closesPopup(document.querySelector(".popup_opened"));
-  }
+  event.key === "Escape" ? closePopup(document.querySelector(".popup_opened")) : false;
+}
+
+//Функция закрытия попапов по клику по подложке (фону)
+function closePopupClick() {
+  event.target.classList.contains("popup_opened") ? closePopup(document.querySelector(".popup_opened")) : false;
 }
 
 //Функция закрытия попапов
-function closesPopup(popup) {
+function closePopup(popup) {
   general.style.overflow = "";
   popup.classList.remove("popup_opened");
+  popup.removeEventListener("click", closePopupClick);
   document.removeEventListener("keydown", closePopupEsc);
 }
 
-//Функции обработки форм
+//Функция обработки формы профиля
 function editProfile(event) {
   event.preventDefault();
   profileName.textContent = popupNameField.value;
   profileJobInfo.textContent = popupJobField.value;
-  closesPopup(popupEdit);
+  closePopup(popupEdit);
 }
 
 //Функция добавление карточки
 function addCard() {
   event.preventDefault();
   cards.prepend(createCard(formAddCardLink.value, formAddCardName.value));
-  closesPopup(popupAddCard);
+  closePopup(popupAddCard);
 }
-/* У меня очистка зачем-то еще и при открытии стоит.
-Даже передвинув за функцию видна очистка из-за плавного transition
-Решил оставить только на открытии. В таком случае точно не видно */
 
 //Слушатели событий
+cards.addEventListener("click", likeCard);
+cards.addEventListener("click", deleteCard);
+cards.addEventListener("click", imgCard);
+
+
 profileEditButton.addEventListener("click", () => {
   popupNameField.value = profileName.textContent;
   popupJobField.value = profileJobInfo.textContent;
@@ -147,8 +235,9 @@ profileAddButton.addEventListener("click", () => {
 });
 
 popup.forEach((popup) =>
-  popup.querySelector(".popup__close-button").addEventListener("click", () => closesPopup(popup))
+  popup.querySelector(".popup__close-button").addEventListener("click", () => closePopup(popup))
 );
 
 formEdit.addEventListener("submit", editProfile);
 formAdd.addEventListener("submit", addCard);
+

@@ -1,0 +1,12 @@
+.popup__container-button_inactive{
+  border: 1px solid #000000;
+  color:#000;
+  background-color: transparent;
+  cursor: auto;
+  margin-top: 13px;
+  opacity:0.2;
+}
+
+.popup__container-button_inactive:hover{
+  background-color: transparent;
+}

@@ -20,11 +20,15 @@
 @import url("../blocks/card/__like-icon/card__like-icon.css");
 @import url("../blocks/footer/__copywrite/footer__copywrite.css");
 @import url("../blocks/popup/popup.css");
+@import url("../blocks/form/form.css");
 @import url("../blocks/popup/__container/popup__container.css");
 @import url("../blocks/popup/__input-container/popup__input-container.css");
 @import url("../blocks/popup/__container-title/popup__container-title.css");
 @import url("../blocks/popup/__container-item/popup__container-item.css");
 @import url("../blocks/popup/__container-button/popup__container-button.css");
+@import url("../blocks/popup/__container-item-error/popup__container-item-error.css");
+@import url("../blocks/popup/__container-item-error/__active/popup__container-item-error_active.css");
+@import url('../blocks/popup/__container-button/_inactive/popup__container-button_inactive.css');
 @import url("../blocks/popup/__close-button/popup__close-button.css");
 @import url("../blocks/popup/_opened/popup_opened.css");
 @import url("../blocks/card/_liked/card_liked.css");

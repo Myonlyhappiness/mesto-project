@@ -48,13 +48,37 @@
       </div>
       <div class="popup popup-edit">
         <div class="popup__container">
-          <form class="form" name="edit">
+          <form class="form" name="edit" novalidate>
             <button type="button" value="close" name="close" class="popup__close-button"></button>
             <h2 class="popup__container-title">Редактировать профиль</h2>
             <fieldset class="popup__input-container">
-              <input class="popup__container-item" maxlength="50" id="name" type="text" name="name" placeholder="Укажите ваше имя" required>
-              <input class="popup__container-item" maxlength="70" id="job" type="text" name="job" placeholder="Кто вы?" required>
-              <button class="popup__container-button" value="save" name="save" type="submit">Сохранить</button>
+                <input class="popup__container-item"
+                minlength="2"
+                maxlength="40"
+                id="name"
+                type="text"
+                name="name"
+                placeholder="Представьтесь, пожалуйста"
+                data-error-message="Будьте добры, используйте только латинские или кириллические буквы, знаки дефиса и пробелы"
+                pattern="^[a-zA-Zа-яёA-ЯЁ\-\s]+$"
+                required>
+
+                <span class="name-input-error"></span>
+
+                <input class="popup__container-item"
+                minlength="2"
+                maxlength="200"
+                id="job"
+                type="text"
+                name="job"
+                placeholder="Расскажите о себе"
+                data-error-message="Будьте добры, используйте только латинские или кириллические буквы, знаки дефиса и пробелы"
+                pattern="^[a-zA-Zа-яёA-ЯЁ\-\s]+$"
+                required>
+
+                <span class="job-input-error"></span>
+
+                <button class="popup__container-button" value="save" name="save" type="submit">Сохранить</button>
             </fieldset>
           </form>
         </div>
@@ -65,8 +89,26 @@
             <button type="button" value="close" name="close" class="popup__close-button"></button>
             <h2 class="popup__container-title">Новое Место</h2>
             <fieldset class="popup__input-container">
-              <input class="popup__container-item" id="image" type="text" name="name" placeholder="Название">
-              <input class="popup__container-item" id="link" type="text" name="link" placeholder="Ссылка на картинку">
+              <input class="popup__container-item"
+              minlength="2"
+              maxlength="30"
+              id="image"
+              type="text"
+              name="name"
+              placeholder="Название"
+              data-error-message="Будьте добры, используйте только латинские или кириллические буквы, знаки дефиса и пробелы"
+              pattern="^[a-zA-Zа-яёA-ЯЁ\-\s]+$"
+              required>
+              <span class="image-input-error"></span>
+              <input class="popup__container-item"
+              minlength="2"
+              maxlength="30"
+               id="link"
+               type="url"
+               name="link"
+               placeholder="Ссылка на картинку"
+               required>
+              <span class="link-input-error"></span>
               <button class="popup__container-button" value="create" name="create" type="submit">Создать</button>
             </fieldset>
           </form>
