@@ -9,3 +9,10 @@
   outline: none;
   margin: 0 0 35px;
 }
+
+
+@media screen and (max-width:400px){
+  .popup__container-item{
+  margin: 0 0 30px;
+  }
+}

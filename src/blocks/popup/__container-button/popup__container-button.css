@@ -22,6 +22,11 @@
 @media screen and (max-width: 618px) {
   .popup__container-button {
     font-size: 14px;
-    margin-top: 45px;
+  }
+}
+
+@media screen and (max-width:400px){
+  .popup__container-button{
+    margin-top: 15px;
   }
 }

@@ -9,4 +9,5 @@
   display: flex;
   z-index: -1;
   transition: all ease-in-out 0.3s;
+  width: 100vw;
 }

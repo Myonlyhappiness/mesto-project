@@ -10,3 +10,9 @@
 .popup__container-button_inactive:hover{
   background-color: transparent;
 }
+
+@media screen and (max-width:400px){
+  .popup__container-button_inactive{
+    margin-top: 15px;
+  }
+}

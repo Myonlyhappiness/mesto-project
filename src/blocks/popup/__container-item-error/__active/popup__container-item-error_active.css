@@ -7,3 +7,9 @@
   min-height: 35px;
 }
 
+
+@media screen and (max-width:400px){
+  .popup__container-item-error_active{
+    min-height: 30px;
+  }
+}
