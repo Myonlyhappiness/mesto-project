@@ -57,7 +57,7 @@ function deleteCard() {
   if (event.target.classList.contains("card__delete-icon")){
     const card = event.target.closest(".card");
     const cardPhoto =  card.querySelector(".card__photo");
-    cards.removeChild(card)
+    card.remove();
     card.removeEventListener("click", deleteCard);
     card.removeEventListener("click", likeCard);
     cardPhoto.removeEventListener("click", openImgCard);
