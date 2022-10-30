@@ -1,29 +1,27 @@
-import {enableValidation, resetInputsErrors} from '../components/validate.js'
+const general = document.querySelector(".general");
+const popupImg = document.querySelector(".popup-img");
+const popupImgElem = document.querySelector(".popup__img-elem");
+const popupImgCaption = document.querySelector(".popup__img-caption");
 
 //Функция открытия попапов
-function opensPopup(popup) {
-  resetInputsErrors();
-  document.querySelector(".general").style.overflowY = "hidden";
+function openPopup(popup) {
+  general.style.overflowY = "hidden";
   popup.classList.add("popup_opened");
   popup.addEventListener("click", closePopupClick);
   document.addEventListener("keydown", closePopupEsc);
 }
 
 // Функция попапа с картинкой карточки
-function imgCard() {
-  const popupImg = document.querySelector(".popup-img");
-  const popupImgElem = document.querySelector(".popup__img-elem");
-  const popupImgCaption = document.querySelector(".popup__img-caption");
-  event.target.classList.contains("card__photo") ? (
+function openImgCard() {
   popupImgCaption.textContent = event.target.alt,
   popupImgElem.setAttribute("src", event.target.src),
   popupImgElem.setAttribute("alt", event.target.alt),
-  opensPopup(popupImg)) : false;
+  openPopup(popupImg);
 }
 
 //Функция закрытия попапов
 function closePopup(popup) {
-  document.querySelector(".general").style.overflow = "";
+  general.style.overflow = "";
   popup.classList.remove("popup_opened");
   popup.removeEventListener("click", closePopupClick);
   document.removeEventListener("keydown", closePopupEsc);
@@ -31,13 +29,16 @@ function closePopup(popup) {
 
 //Функция закрытия попапов по ESC
 function closePopupEsc() {
-  event.key === "Escape" ? closePopup(document.querySelector(".popup_opened")) : false;
+  if (event.key === "Escape"){
+  closePopup(document.querySelector(".popup_opened"))}
 }
 
 //Функция закрытия попапов по клику по подложке (фону)
 function closePopupClick() {
-  event.target.classList.contains("popup_opened") ? closePopup(document.querySelector(".popup_opened")) : false;
+  if(event.target.classList.contains("popup_opened"))
+  {
+  closePopup(document.querySelector(".popup_opened"))};
 }
 
 
-export {opensPopup, imgCard, closePopup, enableValidation};
+export {openPopup, openImgCard, closePopup};

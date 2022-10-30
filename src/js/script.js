@@ -1,9 +1,10 @@
 import '../pages/index.css';
-import {cards, likeCard, deleteCard, addCard, formAdd, popupAddCard} from '../components/card.js'
-import {opensPopup, imgCard, closePopup, enableValidation} from  '../components/modal.js'
+import {cards, createCard} from '../components/card.js'
+import {openPopup, closePopup} from  '../components/modal.js'
+import {enableValidation, resetInputsErrors} from '../components/validate.js'
 
 //Работа с DOM
-const popup = document.querySelectorAll(".popup");
+const popupList = document.querySelectorAll(".popup");
 const profileEditButton = document.querySelector(".profile__info-edit");
 const profileName = document.querySelector(".profile__name");
 const profileJobInfo = document.querySelector(".profile__job-info");
@@ -12,17 +13,23 @@ const popupEdit = document.querySelector(".popup-edit");
 const popupNameField = popupEdit.querySelector("#name");
 const popupJobField = popupEdit.querySelector("#job");
 const profileAddButton = document.querySelector(".profile__add-button");
-
-//Вызов функции валидации форм и полей
-enableValidation({
-  formSelector:'.form',
-  fieldsetSelector: '.popup__input-container',
-  inputSelector: '.popup__container-item',
+const formAdd = document.forms.add;
+const formAddCardLink = formAdd.elements.link;
+const formAddCardName = formAdd.elements.name;
+const popupAddCard = document.querySelector(".popup-add-card");
+const settings =  {
+  formSelector:'form',
+  //fieldsetSelector: 'popup__input-container',
+  inputSelector: 'popup__container-item',
   inputErrorClass: 'popup__container-item-error',
   inputErrorActiveClass: 'popup__container-item-error_active',
-  buttonSelector: '.popup__container-button',
+  buttonSelector: 'popup__container-button',
   buttonInactiveClass: 'popup__container-button_inactive'
-});
+}
+
+
+//Вызов функции валидации форм и полей
+enableValidation(settings);
 
 //Функция обработки формы профиля
 function editProfile() {
@@ -32,23 +39,29 @@ function editProfile() {
   closePopup(popupEdit);
 }
 
-//Слушатели событий
-cards.addEventListener("click", likeCard);
-cards.addEventListener("click", deleteCard);
-cards.addEventListener("click", imgCard);
+//Функция обработки формы добавления новой карточки
+function addCard() {
+  event.preventDefault();
+  cards.prepend(createCard(formAddCardLink.value, formAddCardName.value));
+  closePopup(popupAddCard);
+}
 
+
+//Слушатели событий
 profileEditButton.addEventListener("click", () => {
+  resetInputsErrors(settings);
   popupNameField.value = profileName.textContent;
   popupJobField.value = profileJobInfo.textContent;
-  opensPopup(popupEdit);
+  openPopup(popupEdit);
 });
 
 profileAddButton.addEventListener("click", () => {
+  resetInputsErrors(settings);
   formAdd.reset();
-  opensPopup(popupAddCard);
+  openPopup(popupAddCard);
 });
 
-popup.forEach((popup) =>
+popupList.forEach((popup) =>
   popup.querySelector(".popup__close-button").addEventListener("click", () => closePopup(popup))
 );
 

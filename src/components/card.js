@@ -1,11 +1,7 @@
-import {closePopup} from '../components/modal.js';
-import createCard from '../components/utils.js'
-
+import {openImgCard} from  '../components/modal.js'
 const cards = document.querySelector(".cards");
-const formAdd = document.forms.add;
-const formAddCardLink = formAdd.elements.link;
-const formAddCardName = formAdd.elements.name;
-const popupAddCard = document.querySelector(".popup-add-card");
+const template = document.querySelector("#element").content;
+
 
 //Массив с исходными карточками
 const initialCards = [
@@ -35,25 +31,38 @@ const initialCards = [
   },
 ];
 
+// Создание карточки
+function createCard(link, name) {
+  const card = template.querySelector(".card").cloneNode(true);
+  const cardPhoto =  card.querySelector(".card__photo");
+  cardPhoto.src = link;
+  cardPhoto.alt = name;
+  card.querySelector(".card__caption-text").textContent = name;
+  card.addEventListener("click", deleteCard);
+  card.addEventListener("click", likeCard);
+  cardPhoto.addEventListener("click", openImgCard);
+  return card;
+}
+
 
 // Функция обработки лайка карточки
 function likeCard() {
-  event.target.classList.contains("card__like-icon")
-    ? event.target.classList.toggle("card_liked")
-    : false;
+  if (event.target.classList.contains("card__like-icon")){
+    event.target.classList.toggle("card_liked");
+  }
 }
 
 // Функция обработки клика по иконке удаления
 function deleteCard() {
-  event.target.classList.contains("card__delete-icon")
-    ? cards.removeChild(event.target.closest(".card")) : false;
-}
+  if (event.target.classList.contains("card__delete-icon")){
+    const card = event.target.closest(".card");
+    const cardPhoto =  card.querySelector(".card__photo");
+    cards.removeChild(card)
+    card.removeEventListener("click", deleteCard);
+    card.removeEventListener("click", likeCard);
+    cardPhoto.removeEventListener("click", openImgCard);
+  }
 
-//Функция добавление карточки
-function addCard() {
-  event.preventDefault();
-  cards.prepend(createCard(formAddCardLink.value, formAddCardName.value));
-  closePopup(popupAddCard);
 }
 
 // Создание карточки на основе массива при загрузке страницы
@@ -63,4 +72,4 @@ initialCards.forEach((item) => {
   cards.prepend(createCard(link, name));
 });
 
-export {cards, likeCard, deleteCard, addCard, formAdd, popupAddCard}
+export {cards, deleteCard, createCard}

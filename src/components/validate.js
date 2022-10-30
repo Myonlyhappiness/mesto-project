@@ -1,23 +1,17 @@
 // Функция запуска валидации
 function enableValidation(settings){
-  const formList = Array.from(document.querySelectorAll(settings['formSelector']));
-    formList.forEach((formElement) => {
-      formElement.addEventListener('submit', function (evt) {
-        evt.preventDefault();
-      });
-      const fieldsetList = Array.from(formElement.querySelectorAll(settings['fieldsetSelector']));
-      fieldsetList.forEach((fieldsetItem) => setEventListeners(fieldsetItem, settings));
-    });
-  }
+  const formList = Array.from(document.querySelectorAll(`.${settings['formSelector']}`));
+    formList.forEach((formElement) => setEventListeners(formElement, settings));
+    }
 
 //Функция установки слушателей на поля ввода
-function setEventListeners(fieldsetItem, settings) {
-  const inputList = Array.from(fieldsetItem.querySelectorAll(settings['inputSelector']));
-  const buttonElement = fieldsetItem.querySelector(settings['buttonSelector']);
+function setEventListeners(formElement, settings) {
+  const inputList = Array.from(formElement.querySelectorAll(`.${settings['inputSelector']}`));
+  const buttonElement = formElement.querySelector(`.${settings['buttonSelector']}`);
   toggleButtonState(inputList, buttonElement, settings);
   inputList.forEach((inputItem) => {
     inputItem.addEventListener('input', function () {
-      checkInputValidity(fieldsetItem, inputItem, settings);
+      checkInputValidity(formElement, inputItem, settings);
       toggleButtonState(inputList, buttonElement, settings);
     });
   });
@@ -25,9 +19,14 @@ function setEventListeners(fieldsetItem, settings) {
 
 //Функция валидации(переключения) кнопки
 function toggleButtonState(inputList, buttonElement, settings) {
-  hasInvalidInput(inputList) ? (buttonElement.classList.add(settings['buttonInactiveClass']),
-  buttonElement.disabled = true):
-  (buttonElement.classList.remove(settings['buttonInactiveClass']), buttonElement.disabled = false);
+  if(hasInvalidInput(inputList)){
+    buttonElement.classList.add(settings['buttonInactiveClass'])
+    buttonElement.disabled = true;
+  }
+   else{
+    buttonElement.classList.remove(settings['buttonInactiveClass']);
+    buttonElement.disabled = false;
+  }
 }
 
 //Функция проверки всех полей
@@ -36,39 +35,47 @@ function hasInvalidInput(inputList) {
 }
 
 //Функция валидации
-function checkInputValidity(fieldsetItem, inputItem, settings) {
-  inputItem.validity.patternMismatch ? inputItem.setCustomValidity(inputItem.dataset.errorMessage):
-  inputItem.setCustomValidity("");
+function checkInputValidity(formElement, inputItem, settings) {
+  if(inputItem.validity.patternMismatch){
+    inputItem.setCustomValidity(inputItem.dataset.errorMessage)}
+    else{
+      inputItem.setCustomValidity("");
+    }
 
-  !inputItem.validity.valid ? showInputError(fieldsetItem, inputItem, settings, inputItem.validationMessage):
-  hideInputError(fieldsetItem, inputItem, settings);
+  if(!inputItem.validity.valid){
+    showInputError(formElement, inputItem, settings, inputItem.validationMessage);
+  }
+  else {
+    hideInputError(formElement, inputItem, settings);
+  }
   }
 
   //Функция показа ошибки
-function showInputError(fieldsetItem, inputItem, settings, errorMessage) {
-  const errorElement = fieldsetItem.querySelector(`.${inputItem.id}-input-error`);
+function showInputError(formElement, inputItem, settings, errorMessage) {
+  const errorElement = formElement.querySelector(`.${inputItem.id}-input-error`);
   inputItem.classList.add(settings['inputErrorClass']);
   errorElement.classList.add(settings['inputErrorActiveClass']);
   errorElement.textContent = errorMessage;
 }
 
 //Функция удаления ошибки
-function hideInputError(fieldsetItem, inputItem, settings) {
-  const errorElement = fieldsetItem.querySelector(`.${inputItem.id}-input-error`);
+function hideInputError(formElement, inputItem, settings) {
+  const errorElement = formElement.querySelector(`.${inputItem.id}-input-error`);
   inputItem.classList.remove(settings['inputErrorClass']);
   errorElement.classList.remove(settings['inputErrorActiveClass']);
   errorElement.textContent = ' ';
 }
 
 // Функция сброса ошибок полей
-function resetInputsErrors() {
-  Array.from(document.querySelectorAll('.popup__container-item-error_active')).forEach((item) => {
-    item.classList.remove('popup__container-item-error_active');
+function resetInputsErrors(settings) {
+  Array.from(document.querySelectorAll(`.${settings['inputErrorActiveClass']}`)).forEach((item) => {
+
+    item.classList.remove(settings['inputErrorActiveClass']);
     item.textContent = '';
   })
 
-  Array.from(document.querySelectorAll('.popup__container-item-error')).forEach((item) => {
-    item.classList.remove('popup__container-item-error');
+  Array.from(document.querySelectorAll(`.${settings['inputErrorClass']}`)).forEach((item) => {
+    item.classList.remove(settings['inputErrorClass']);
   })
 }
 
