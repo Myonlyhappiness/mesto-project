@@ -1,7 +1,7 @@
 import '../pages/index.css';
 import {cards, createCard} from '../components/card.js'
 import {openPopup, closePopup} from  '../components/modal.js'
-import {enableValidation, resetInputsErrors} from '../components/validate.js'
+import {enableValidation, resetInputsErrors, setEventListeners} from '../components/validate.js'
 
 //Работа с DOM
 const popupList = document.querySelectorAll(".popup");
@@ -19,7 +19,6 @@ const formAddCardName = formAdd.elements.name;
 const popupAddCard = document.querySelector(".popup-add-card");
 const settings =  {
   formSelector:'form',
-  //fieldsetSelector: 'popup__input-container',
   inputSelector: 'popup__container-item',
   inputErrorClass: 'popup__container-item-error',
   inputErrorActiveClass: 'popup__container-item-error_active',
@@ -46,19 +45,20 @@ function addCard() {
   closePopup(popupAddCard);
 }
 
-
 //Слушатели событий
 profileEditButton.addEventListener("click", () => {
   resetInputsErrors(settings);
   popupNameField.value = profileName.textContent;
   popupJobField.value = profileJobInfo.textContent;
   openPopup(popupEdit);
+  setEventListeners(formEdit, settings);
 });
 
 profileAddButton.addEventListener("click", () => {
   resetInputsErrors(settings);
   formAdd.reset();
   openPopup(popupAddCard);
+  setEventListeners(formAdd, settings);
 });
 
 popupList.forEach((popup) =>

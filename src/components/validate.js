@@ -8,13 +8,17 @@ function enableValidation(settings){
 function setEventListeners(formElement, settings) {
   const inputList = Array.from(formElement.querySelectorAll(`.${settings['inputSelector']}`));
   const buttonElement = formElement.querySelector(`.${settings['buttonSelector']}`);
+  if (formElement.closest('.popup').classList.contains("popup_opened")){
   toggleButtonState(inputList, buttonElement, settings);
+}
+  else {
   inputList.forEach((inputItem) => {
     inputItem.addEventListener('input', function () {
       checkInputValidity(formElement, inputItem, settings);
       toggleButtonState(inputList, buttonElement, settings);
+      });
     });
-  });
+  }
 }
 
 //Функция валидации(переключения) кнопки
@@ -79,4 +83,4 @@ function resetInputsErrors(settings) {
   })
 }
 
-export {enableValidation, resetInputsErrors}
+export {enableValidation, resetInputsErrors, setEventListeners}

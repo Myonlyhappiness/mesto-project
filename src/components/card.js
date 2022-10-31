@@ -3,6 +3,7 @@ const cards = document.querySelector(".cards");
 const template = document.querySelector("#element").content;
 
 
+
 //Массив с исходными карточками
 const initialCards = [
   {
@@ -35,11 +36,13 @@ const initialCards = [
 function createCard(link, name) {
   const card = template.querySelector(".card").cloneNode(true);
   const cardPhoto =  card.querySelector(".card__photo");
+  const deleteCardIcon = card.querySelector(".card__delete-icon");
+  const likeCardIcon = card.querySelector(".card__like-icon");
   cardPhoto.src = link;
   cardPhoto.alt = name;
   card.querySelector(".card__caption-text").textContent = name;
-  card.addEventListener("click", deleteCard);
-  card.addEventListener("click", likeCard);
+  deleteCardIcon.addEventListener("click", deleteCard);
+  likeCardIcon.addEventListener("click", likeCard);
   cardPhoto.addEventListener("click", openImgCard);
   return card;
 }

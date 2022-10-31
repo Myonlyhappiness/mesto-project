@@ -6,12 +6,13 @@
   line-height: 1.1;
   text-overflow: ellipsis;
   overflow: hidden;
+  white-space: nowrap;
   max-width: 330px;
 }
 
 @media screen and (max-width: 750px) {
   .profile__name {
-    margin: 0 0 0 28px; 
+    margin: 0 0 0 28px;
   }
 }
 

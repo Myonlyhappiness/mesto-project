@@ -7,7 +7,7 @@ const popupImgCaption = document.querySelector(".popup__img-caption");
 function openPopup(popup) {
   general.style.overflowY = "hidden";
   popup.classList.add("popup_opened");
-  popup.addEventListener("click", closePopupClick);
+  popup.addEventListener("mousedown", closePopupClick);
   document.addEventListener("keydown", closePopupEsc);
 }
 
@@ -37,7 +37,7 @@ function closePopupEsc() {
 function closePopupClick() {
   if(event.target.classList.contains("popup_opened"))
   {
-  closePopup(document.querySelector(".popup_opened"))};
+  closePopup(event.target)};
 }
 
 
