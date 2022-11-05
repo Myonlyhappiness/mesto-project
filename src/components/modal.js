@@ -3,6 +3,7 @@ const popupImg = document.querySelector(".popup-img");
 const popupImgElem = document.querySelector(".popup__img-elem");
 const popupImgCaption = document.querySelector(".popup__img-caption");
 
+
 //Функция открытия попапов
 function openPopup(popup) {
   general.style.overflowY = "hidden";
@@ -23,7 +24,7 @@ function openImgCard() {
 function closePopup(popup) {
   general.style.overflow = "";
   popup.classList.remove("popup_opened");
-  popup.removeEventListener("click", closePopupClick);
+  popup.removeEventListener("mousedown", closePopupClick);
   document.removeEventListener("keydown", closePopupEsc);
 }
 
@@ -36,8 +37,9 @@ function closePopupEsc() {
 //Функция закрытия попапов по клику по подложке (фону)
 function closePopupClick() {
   if(event.target.classList.contains("popup_opened"))
-  {
-  closePopup(event.target)};
+  {closePopup(event.target)};
+  if(event.target.classList.contains("popup-delete-card"))
+  {closePopup(event.target)};
 }
 
 

@@ -1,78 +1,83 @@
-import {openImgCard} from  '../components/modal.js'
+import {openImgCard, openPopup, closePopup} from  '../components/modal.js'
+import {getInitialCards, setLike, deleteLike, eraseCard} from '../components/api.js'
+
 const cards = document.querySelector(".cards");
 const template = document.querySelector("#element").content;
+const deletePopup = document.querySelector(".popup-delete-card");
+const popupDeleteCardButton = document.querySelector(".popup-delete-card__button");
 
-
-
-//Массив с исходными карточками
-const initialCards = [
-  {
-    name: "Архыз",
-    link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg",
-  },
-  {
-    name: "Челябинская область",
-    link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg",
-  },
-  {
-    name: "Иваново",
-    link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg",
-  },
-  {
-    name: "Камчатка",
-    link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg",
-  },
-  {
-    name: "Холмогорский район",
-    link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg",
-  },
-  {
-    name: "Байкал",
-    link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg",
-  },
-];
 
 // Создание карточки
-function createCard(link, name) {
+function createCard(cardId, link, name, ownerId, likes, pageOwner) {
   const card = template.querySelector(".card").cloneNode(true);
-  const cardPhoto =  card.querySelector(".card__photo");
+  const cardPhoto = card.querySelector(".card__photo");
   const deleteCardIcon = card.querySelector(".card__delete-icon");
-  const likeCardIcon = card.querySelector(".card__like-icon");
+  const cardLikeIcon = card.querySelector(".card__like-icon");
+  const cardLikeIconCounter = card.querySelector(".card__like-icon-counter")
+  cardLikeIconCounter.textContent = likes.length;
   cardPhoto.src = link;
   cardPhoto.alt = name;
   card.querySelector(".card__caption-text").textContent = name;
-  deleteCardIcon.addEventListener("click", deleteCard);
-  likeCardIcon.addEventListener("click", likeCard);
+  cardLikeIcon.addEventListener("click", () => likeCard(cardId, cardLikeIcon, cardLikeIconCounter));
   cardPhoto.addEventListener("click", openImgCard);
+  //Проверка лайка
+  likes.forEach((like) => {
+    if(like['_id'] === pageOwner){
+      cardLikeIcon.classList.add('card_liked');
+  }
+  })
+  //Удаление иконки корзины с чужой карточки
+   if(ownerId != pageOwner){
+    deleteCardIcon.remove()
+   }
+   deleteCardIcon.addEventListener("click", () => {
+    openPopup(deletePopup)
+    popupDeleteCardButton.onclick = () => {
+      deleteCard(cardId, card)
+      closePopup(deletePopup)
+    }
+  });
   return card;
 }
 
-
 // Функция обработки лайка карточки
-function likeCard() {
-  if (event.target.classList.contains("card__like-icon")){
-    event.target.classList.toggle("card_liked");
+function likeCard(cardId, cardLikeIcon, cardLikeIconCounter) {
+  if (cardLikeIcon.classList.contains("card_liked")){
+    deleteLike(cardId)
+    .then((res) => {
+      cardLikeIconCounter.textContent = res.likes.length;
+    })
+    .catch(error => console.log(error))
   }
+else {
+  setLike(cardId)
+    .then((res) => {
+      cardLikeIconCounter.textContent = res.likes.length;
+    })
+    .catch(error => console.log(error))
+  }
+  cardLikeIcon.classList.toggle("card_liked");
 }
 
 // Функция обработки клика по иконке удаления
-function deleteCard() {
-  if (event.target.classList.contains("card__delete-icon")){
-    const card = event.target.closest(".card");
-    const cardPhoto =  card.querySelector(".card__photo");
+function deleteCard(cardId, card) {
+    eraseCard(cardId)
+  .then((res) => {
+    console.log(res.message)
+  })
+  .catch(error => console.log(error))
     card.remove();
-    card.removeEventListener("click", deleteCard);
-    card.removeEventListener("click", likeCard);
-    cardPhoto.removeEventListener("click", openImgCard);
-  }
-
 }
 
-// Создание карточки на основе массива при загрузке страницы
-initialCards.forEach((item) => {
-  const name = item.name;
-  const link = item.link;
-  cards.prepend(createCard(link, name));
-});
+//Создание карточек на основе массива при загрузке страницы
+const initialCards = ((pageOwner) => {
+  getInitialCards()
+.then((res) => {
+  res.reverse().forEach((item) => {
+    cards.prepend(createCard(item['_id'], item.link, item.name, item.owner['_id'], item.likes, pageOwner));
+     });
+})
+.catch(error => console.log(error))
+})
 
-export {cards, deleteCard, createCard}
+export {cards, deleteCard, createCard, initialCards}
