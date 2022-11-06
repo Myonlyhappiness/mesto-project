@@ -1,9 +1,9 @@
 import '../pages/index.css';
 import {cards, createCard} from '../components/card.js'
 import {openPopup, closePopup} from  '../components/modal.js'
-import {enableValidation, resetInputsErrors, setEventListeners} from '../components/validate.js'
-import {getUserInfo, updateUserInfo, addNewCard, updateUserAvatar} from '../components/api.js'
-import {initialCards} from '../components/card.js'
+import {enableValidation, resetInputsErrors} from '../components/validate.js'
+import {getUserInfo, getInitialCards, updateUserInfo, addNewCard, updateUserAvatar} from '../components/api.js'
+import {renderLoading} from '../components/utils'
 
 //Работа с DOM
 const popupList = document.querySelectorAll(".popup");
@@ -32,21 +32,27 @@ const settings =  {
   buttonInactiveClass: 'popup__container-button_inactive'
 }
 
-//Получение информации в профиль и получение айди
-getUserInfo()
-.then((res) => {
-  profileAvatar.src = res['avatar'];
-  profileName.textContent = res.name;
-  profileJobInfo.textContent = res.about;
-  initialCards(res['_id']);
+// Получение данный пользователя (id) и отрисовка карточек
+Promise.all([getUserInfo(), getInitialCards()])
+.then(res => {
+  const [userInfo, initialCards] = res;
+  return [userInfo, initialCards];
+
+})
+.then(([userInfo, initialCards]) => {
+  profileAvatar.src = userInfo['avatar'];
+  profileName.textContent = userInfo.name;
+  profileJobInfo.textContent = userInfo.about;
+  initialCards.reverse().forEach((item) => {
+    cards.prepend(createCard(userInfo, item));
+     });
 })
 .catch(error => console.log(error))
 
-//Вызов функции валидации форм и полей
 enableValidation(settings);
 
 //Функция обработки формы профиля
-function editProfile() {
+function editProfile(event) {
   event.preventDefault();
   const submitButtonText = event.submitter;
   renderLoading(true, submitButtonText);
@@ -54,33 +60,33 @@ function editProfile() {
   .then((res) => {
   profileName.textContent = res.name;
   profileJobInfo.textContent = res.about;
+  closePopup(popupEdit);
   })
   .catch(error => console.log(error))
   .finally(() => renderLoading(false, submitButtonText))
-  closePopup(popupEdit);
 }
 
 //Функция обработки формы добавления новой карточки
-function addCard() {
+function addCard(event) {
   event.preventDefault();
   const submitButtonText = event.submitter;
   renderLoading(true, submitButtonText);
-  getUserInfo()
-  .then((res) => {
-   const pageOwner = res['_id']
-   addNewCard(formAddCardLink.value, formAddCardName.value)
-   .then((res) => {
-    cards.prepend(createCard(res['_id'], res.link, res.name, res.owner['_id'], res.likes, pageOwner));
+
+  Promise.all([getUserInfo(), addNewCard(formAddCardLink.value, formAddCardName.value)])
+  .then(res => {
+    const [userInfo, addedCard] = res;
+    return [userInfo, addedCard];
   })
-  .catch(error => console.log(error))
+.then(([userInfo, addedCard]) => {
+    cards.prepend(createCard(userInfo, addedCard));
+    closePopup(popupAddCard);
   })
   .catch(error => console.log(error))
   .finally(() => renderLoading(false, submitButtonText))
-  closePopup(popupAddCard);
 }
 
 //Функция обновления аватара пользователя
-function updateAvatar() {
+function updateAvatar(event) {
   event.preventDefault();
   const submitButtonText = event.submitter;
   renderLoading(true, submitButtonText);
@@ -93,42 +99,29 @@ function updateAvatar() {
   .finally(() => renderLoading(false, submitButtonText))
 }
 
-function renderLoading(isLoading, submitButtonText){
-  if (isLoading){
-    submitButtonText.textContent = "Сохранение.."
-  }
-  else {
-    if(submitButtonText.value === "create"){
-      submitButtonText.textContent = "Создать"
-    }
-    else if(submitButtonText.value === "save"){
-      submitButtonText.textContent = "Сохранить"
-    }
-   }
-}
-
 //Слушатели событий
+
+// По поводу постоянной установки слушателей при открытии формы, вас судя по всему смутило название функции setlisteners.
+// У меня в этой функции стояла проверка, что если у попапа есть класс popup_opened, то проверяется только кнопка. Повторно слушатели не устанавливались. Но то, что вас смутило название - это уже моя ошибка. Перевел функционал в функцию сброса валидации.
+
 profileAvatar.addEventListener("click", () => {
-  resetInputsErrors(settings);
+  resetInputsErrors(formUpdateAvatar, settings);
   formUpdateAvatar.reset();
   openPopup(popupUpdateAvatar);
-  setEventListeners(formEdit, settings);
   })
 
 
-profileEditButton.addEventListener("click", () => {
-  resetInputsErrors(settings);
+profileEditButton.addEventListener("click", (event) => {
+  resetInputsErrors(formEdit, settings);
   popupNameField.value = profileName.textContent;
   popupJobField.value = profileJobInfo.textContent;
   openPopup(popupEdit);
-  setEventListeners(formEdit, settings);
 });
 
 profileAddButton.addEventListener("click", () => {
-  resetInputsErrors(settings);
+  resetInputsErrors(formAdd, settings);
   formAdd.reset();
   openPopup(popupAddCard);
-  setEventListeners(formAdd, settings);
 });
 
 popupList.forEach((popup) =>

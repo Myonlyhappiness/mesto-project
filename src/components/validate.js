@@ -8,17 +8,12 @@ function enableValidation(settings){
 function setEventListeners(formElement, settings) {
   const inputList = Array.from(formElement.querySelectorAll(`.${settings['inputSelector']}`));
   const buttonElement = formElement.querySelector(`.${settings['buttonSelector']}`);
-  if (formElement.closest('.popup').classList.contains("popup_opened")){
-  toggleButtonState(inputList, buttonElement, settings);
-}
-  else {
   inputList.forEach((inputItem) => {
     inputItem.addEventListener('input', function () {
       checkInputValidity(formElement, inputItem, settings);
       toggleButtonState(inputList, buttonElement, settings);
       });
     });
-  }
 }
 
 //Функция валидации(переключения) кнопки
@@ -70,17 +65,21 @@ function hideInputError(formElement, inputItem, settings) {
   errorElement.textContent = ' ';
 }
 
-// Функция сброса ошибок полей
-function resetInputsErrors(settings) {
-  Array.from(document.querySelectorAll(`.${settings['inputErrorActiveClass']}`)).forEach((item) => {
+// Функция сброса ошибок полей и валидации(переключения) кнопки при открытии попапов
+function resetInputsErrors(formElement, settings) {
+  const inputList = Array.from(formElement.querySelectorAll(`.${settings['inputSelector']}`));
+  const buttonElement = formElement.querySelector(`.${settings['buttonSelector']}`);
 
+ toggleButtonState(inputList, buttonElement, settings);
+
+  Array.from(document.querySelectorAll(`.${settings['inputErrorActiveClass']}`)).forEach((item) => {
     item.classList.remove(settings['inputErrorActiveClass']);
     item.textContent = '';
   })
-
   Array.from(document.querySelectorAll(`.${settings['inputErrorClass']}`)).forEach((item) => {
     item.classList.remove(settings['inputErrorClass']);
   })
 }
 
-export {enableValidation, resetInputsErrors, setEventListeners}
+
+export {enableValidation, resetInputsErrors}

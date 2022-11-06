@@ -13,7 +13,7 @@ function openPopup(popup) {
 }
 
 // Функция попапа с картинкой карточки
-function openImgCard() {
+function openImgCard(event) {
   popupImgCaption.textContent = event.target.alt,
   popupImgElem.setAttribute("src", event.target.src),
   popupImgElem.setAttribute("alt", event.target.alt),
@@ -29,18 +29,17 @@ function closePopup(popup) {
 }
 
 //Функция закрытия попапов по ESC
-function closePopupEsc() {
+function closePopupEsc(event) {
   if (event.key === "Escape"){
   closePopup(document.querySelector(".popup_opened"))}
 }
 
 //Функция закрытия попапов по клику по подложке (фону)
-function closePopupClick() {
+function closePopupClick(event) {
   if(event.target.classList.contains("popup_opened"))
   {closePopup(event.target)};
   if(event.target.classList.contains("popup-delete-card"))
   {closePopup(event.target)};
 }
-
 
 export {openPopup, openImgCard, closePopup};

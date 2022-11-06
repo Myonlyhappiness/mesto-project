@@ -1,5 +1,6 @@
 import {openImgCard, openPopup, closePopup} from  '../components/modal.js'
-import {getInitialCards, setLike, deleteLike, eraseCard} from '../components/api.js'
+import {setLike, deleteLike, eraseCard} from '../components/api.js'
+import {renderLoading} from '../components/utils'
 
 const cards = document.querySelector(".cards");
 const template = document.querySelector("#element").content;
@@ -8,33 +9,32 @@ const popupDeleteCardButton = document.querySelector(".popup-delete-card__button
 
 
 // Создание карточки
-function createCard(cardId, link, name, ownerId, likes, pageOwner) {
+function createCard(userInfo, addedCard) {
   const card = template.querySelector(".card").cloneNode(true);
   const cardPhoto = card.querySelector(".card__photo");
   const deleteCardIcon = card.querySelector(".card__delete-icon");
   const cardLikeIcon = card.querySelector(".card__like-icon");
   const cardLikeIconCounter = card.querySelector(".card__like-icon-counter")
-  cardLikeIconCounter.textContent = likes.length;
-  cardPhoto.src = link;
-  cardPhoto.alt = name;
+  cardLikeIconCounter.textContent = addedCard.likes.length;
+  cardPhoto.src = addedCard.link;
+  cardPhoto.alt = addedCard.name;
   card.querySelector(".card__caption-text").textContent = name;
-  cardLikeIcon.addEventListener("click", () => likeCard(cardId, cardLikeIcon, cardLikeIconCounter));
+  cardLikeIcon.addEventListener("click", () => likeCard(addedCard["_id"], cardLikeIcon, cardLikeIconCounter));
   cardPhoto.addEventListener("click", openImgCard);
   //Проверка лайка
-  likes.forEach((like) => {
-    if(like['_id'] === pageOwner){
+  addedCard.likes.forEach((like) => {
+    if(like["_id"] === userInfo['_id']){
       cardLikeIcon.classList.add('card_liked');
   }
   })
   //Удаление иконки корзины с чужой карточки
-   if(ownerId != pageOwner){
+   if(addedCard.owner['_id'] != userInfo['_id']){
     deleteCardIcon.remove()
    }
    deleteCardIcon.addEventListener("click", () => {
     openPopup(deletePopup)
     popupDeleteCardButton.onclick = () => {
-      deleteCard(cardId, card)
-      closePopup(deletePopup)
+      deleteCard(addedCard["_id"], card, deletePopup)
     }
   });
   return card;
@@ -46,6 +46,7 @@ function likeCard(cardId, cardLikeIcon, cardLikeIconCounter) {
     deleteLike(cardId)
     .then((res) => {
       cardLikeIconCounter.textContent = res.likes.length;
+      cardLikeIcon.classList.toggle("card_liked");
     })
     .catch(error => console.log(error))
   }
@@ -53,31 +54,23 @@ else {
   setLike(cardId)
     .then((res) => {
       cardLikeIconCounter.textContent = res.likes.length;
+      cardLikeIcon.classList.toggle("card_liked");
     })
     .catch(error => console.log(error))
   }
-  cardLikeIcon.classList.toggle("card_liked");
 }
 
 // Функция обработки клика по иконке удаления
-function deleteCard(cardId, card) {
+function deleteCard(cardId, card, deletePopup) {
+  renderLoading(true, popupDeleteCardButton);
     eraseCard(cardId)
   .then((res) => {
+    card.remove();
+    closePopup(deletePopup)
     console.log(res.message)
   })
   .catch(error => console.log(error))
-    card.remove();
+  .finally(() => renderLoading(false, popupDeleteCardButton))
 }
 
-//Создание карточек на основе массива при загрузке страницы
-const initialCards = ((pageOwner) => {
-  getInitialCards()
-.then((res) => {
-  res.reverse().forEach((item) => {
-    cards.prepend(createCard(item['_id'], item.link, item.name, item.owner['_id'], item.likes, pageOwner));
-     });
-})
-.catch(error => console.log(error))
-})
-
-export {cards, deleteCard, createCard, initialCards}
+export {cards, deleteCard, createCard}
