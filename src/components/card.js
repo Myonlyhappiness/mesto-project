@@ -10,6 +10,7 @@ const popupDeleteCardButton = document.querySelector(".popup-delete-card__button
 
 // Создание карточки
 function createCard(userInfo, addedCard) {
+  console.log(addedCard.name)
   const card = template.querySelector(".card").cloneNode(true);
   const cardPhoto = card.querySelector(".card__photo");
   const deleteCardIcon = card.querySelector(".card__delete-icon");
@@ -18,7 +19,7 @@ function createCard(userInfo, addedCard) {
   cardLikeIconCounter.textContent = addedCard.likes.length;
   cardPhoto.src = addedCard.link;
   cardPhoto.alt = addedCard.name;
-  card.querySelector(".card__caption-text").textContent = name;
+  card.querySelector(".card__caption-text").textContent = addedCard.name;
   cardLikeIcon.addEventListener("click", () => likeCard(addedCard["_id"], cardLikeIcon, cardLikeIconCounter));
   cardPhoto.addEventListener("click", openImgCard);
   //Проверка лайка
