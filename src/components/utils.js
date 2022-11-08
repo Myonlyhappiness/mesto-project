@@ -10,7 +10,7 @@ function renderLoading(isLoading, submitButtonText){
     if(submitButtonText.value === "create"){
       submitButtonText.textContent = "Создать"
     }
-    if(submitButtonText.value === "accept"){
+    else if(submitButtonText.value === "accept"){
       submitButtonText.textContent = "Да"
     }
     else if(submitButtonText.value === "save"){
