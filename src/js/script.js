@@ -110,7 +110,6 @@ profileAvatar.addEventListener("click", () => {
   openPopup(popupUpdateAvatar);
   })
 
-
 profileEditButton.addEventListener("click", (event) => {
   resetInputsErrors(formEdit, settings);
   popupNameField.value = profileName.textContent;
