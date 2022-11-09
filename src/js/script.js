@@ -108,9 +108,9 @@ profileAvatar.addEventListener("click", () => {
 
 
 profileEditButton.addEventListener("click", (event) => {
-  resetInputsErrors(formEdit, settings);
   popupNameField.value = profileName.textContent;
   popupJobField.value = profileJobInfo.textContent;
+  resetInputsErrors(formEdit, settings);
   openPopup(popupEdit);
 });
 
