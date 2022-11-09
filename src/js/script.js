@@ -106,7 +106,6 @@ profileAvatar.addEventListener("click", () => {
   openPopup(popupUpdateAvatar);
   })
 
-
 profileEditButton.addEventListener("click", (event) => {
   popupNameField.value = profileName.textContent;
   popupJobField.value = profileJobInfo.textContent;
