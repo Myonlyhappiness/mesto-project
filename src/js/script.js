@@ -48,7 +48,6 @@ Promise.all([getUserInfo(), getInitialCards()])
      });
 })
 .catch(error => console.log(error))
-
 enableValidation(settings);
 
 //Функция обработки формы профиля
