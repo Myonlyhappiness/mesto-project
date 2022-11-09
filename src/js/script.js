@@ -48,6 +48,7 @@ Promise.all([getUserInfo(), getInitialCards()])
      });
 })
 .catch(error => console.log(error))
+
 enableValidation(settings);
 
 //Функция обработки формы профиля
@@ -99,15 +100,12 @@ function updateAvatar(event) {
 }
 
 //Слушатели событий
-
-// По поводу постоянной установки слушателей при открытии формы, вас судя по всему смутило название функции setlisteners.
-// У меня в этой функции стояла проверка, что если у попапа есть класс popup_opened, то проверяется только кнопка. Повторно слушатели не устанавливались. Но то, что вас смутило название - это уже моя ошибка. Перевел функционал в функцию сброса валидации.
-
 profileAvatar.addEventListener("click", () => {
   resetInputsErrors(formUpdateAvatar, settings);
   formUpdateAvatar.reset();
   openPopup(popupUpdateAvatar);
   })
+
 
 profileEditButton.addEventListener("click", (event) => {
   resetInputsErrors(formEdit, settings);
