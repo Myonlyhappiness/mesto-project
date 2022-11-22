@@ -1,16 +1,21 @@
 import {openImgCard, openPopup, closePopup} from  '../components/modal.js'
-import {setLike, deleteLike, eraseCard} from '../components/api.js'
+import {api} from '../components/api.js'
 import {renderLoading} from '../components/utils'
 
 const cards = document.querySelector(".cards");
 const template = document.querySelector("#element").content;
 const deletePopup = document.querySelector(".popup-delete-card");
 const popupDeleteCardButton = document.querySelector(".popup-delete-card__button");
+let deletedCardId
+let deletedCardElement
 
+//Слушатель кнопки подтверждения удалния карточки
+popupDeleteCardButton.addEventListener("click", () => {
+  deleteCard(deletedCardId, deletedCardElement, deletePopup)
+})
 
 // Создание карточки
 function createCard(userInfo, addedCard) {
-  console.log(addedCard.name)
   const card = template.querySelector(".card").cloneNode(true);
   const cardPhoto = card.querySelector(".card__photo");
   const deleteCardIcon = card.querySelector(".card__delete-icon");
@@ -34,12 +39,14 @@ function createCard(userInfo, addedCard) {
    }
    deleteCardIcon.addEventListener("click", () => {
     openPopup(deletePopup)
-    popupDeleteCardButton.onclick = () => {
-      deleteCard(addedCard["_id"], card, deletePopup)
-    }
+    deletedCardId = addedCard["_id"];
+    deletedCardElement = card;
   });
+
   return card;
 }
+
+
 
 // Функция обработки лайка карточки
 function likeCard(cardId, cardLikeIcon, cardLikeIconCounter) {
