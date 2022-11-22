@@ -24,8 +24,8 @@ class Card {
     const template = document.querySelector(this._selector);
     return template.content.querySelector(".card").cloneNode(true);
   }
-  _render() {
-    
+  _createCard() {
+    const card = this._getElement();
   }
 }
 
