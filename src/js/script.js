@@ -81,7 +81,7 @@ profileAvatar.addEventListener("click", () => {
   openPopup(popupUpdateAvatar);
   })
 
-profileEditButton.addEventListener("click", (event) => {
+profileEditButton.addEventListener("click", () => {
   popupNameField.value = profileName.textContent;
   popupJobField.value = profileJobInfo.textContent;
   resetInputsErrors(formEdit, settings);

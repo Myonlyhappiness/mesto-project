@@ -3,19 +3,34 @@ import {api} from '../components/api.js'
 import {renderLoading} from '../components/utils'
 
 const cards = document.querySelector(".cards");
-const template = document.querySelector("#element").content;
+
 const deletePopup = document.querySelector(".popup-delete-card");
 const popupDeleteCardButton = document.querySelector(".popup-delete-card__button");
 let deletedCardId
 let deletedCardElement
 
 //Слушатель кнопки подтверждения удалния карточки
-popupDeleteCardButton.addEventListener("click", () => {
+/*popupDeleteCardButton.addEventListener("click", () => {
   deleteCard(deletedCardId, deletedCardElement, deletePopup)
-})
+})*/
+
+class Card {
+  constuctor([userInfo, addedCard], selector) {
+    this._userInfo = userInfo;
+    this._addedCard = addedCard;
+    this._selector = selector;
+  }
+  _getElement() {
+    const template = document.querySelector(this._selector);
+    return template.content.querySelector(".card").cloneNode(true);
+  }
+  _render() {
+    
+  }
+}
 
 // Создание карточки
-function createCard(userInfo, addedCard) {
+/*function createCard(userInfo, addedCard) {
   const card = template.querySelector(".card").cloneNode(true);
   const cardPhoto = card.querySelector(".card__photo");
   const deleteCardIcon = card.querySelector(".card__delete-icon");
@@ -44,7 +59,7 @@ function createCard(userInfo, addedCard) {
   });
 
   return card;
-}
+}*/
 
 
 
