@@ -1,4 +1,7 @@
+
+
 //Работа с DOM
+const cards = document.querySelector(".cards");
 const popupList = document.querySelectorAll(".popup");
 const profileEditButton = document.querySelector(".profile__info-edit");
 const profileAvatar = document.querySelector(".profile__avatar");
@@ -48,4 +51,4 @@ function renderLoading(isLoading, submitButtonText){
    }
 }
 
-export {renderLoading, popupList, profileEditButton, profileAvatar, popupUpdateAvatar, formUpdateAvatar, formUpdateAvatarLink, profileName, profileJobInfo, formEdit, popupEdit, popupNameField, popupJobField, profileAddButton, formAdd, formAddCardLink, formAddCardName, popupAddCard, settings}
+export {cards, renderLoading, popupList, profileEditButton, profileAvatar, popupUpdateAvatar, formUpdateAvatar, formUpdateAvatarLink, profileName, profileJobInfo, formEdit, popupEdit, popupNameField, popupJobField, profileAddButton, formAdd, formAddCardLink, formAddCardName, popupAddCard, settings}

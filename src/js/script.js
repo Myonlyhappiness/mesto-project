@@ -1,25 +1,21 @@
 import '../pages/index.css';
-import {cards, createCard} from '../components/card.js'
+import {Card} from '../components/card.js'
 import {openPopup, closePopup} from  '../components/modal.js'
 import {enableValidation, resetInputsErrors} from '../components/validate.js'
 import {api} from '../components/api.js'
-import {renderLoading, popupList, profileEditButton, profileAvatar, popupUpdateAvatar, formUpdateAvatar, formUpdateAvatarLink, profileName, profileJobInfo, formEdit, popupEdit, popupNameField, popupJobField, profileAddButton, formAdd, formAddCardLink, formAddCardName, popupAddCard, settings} from '../components/utils'
+import {cards, renderLoading, popupList, profileEditButton, profileAvatar, popupUpdateAvatar, formUpdateAvatar, formUpdateAvatarLink, profileName, profileJobInfo, formEdit, popupEdit, popupNameField, popupJobField, profileAddButton, formAdd, formAddCardLink, formAddCardName, popupAddCard, settings} from '../components/utils'
 
 
 
-// Получение данный пользователя (id) и отрисовка карточек
+// Получение данных пользователя (id) и отрисовка карточек
 Promise.all([api.getUserInfo(), api.getInitialCards()])
-.then(res => {
-  const [userInfo, initialCards] = res;
-  return [userInfo, initialCards];
-
-})
 .then(([userInfo, initialCards]) => {
   profileAvatar.src = userInfo['avatar'];
   profileName.textContent = userInfo.name;
   profileJobInfo.textContent = userInfo.about;
   initialCards.reverse().forEach((item) => {
-    cards.prepend(createCard(userInfo, item));
+    const card = new Card(userInfo, item, '#element', api);
+    cards.prepend(card.createCard());
      });
 })
 .catch(error => console.log(error))
@@ -48,10 +44,6 @@ function addCard(event) {
   renderLoading(true, submitButtonText);
 
   Promise.all([getUserInfo(), addNewCard(formAddCardLink.value, formAddCardName.value)])
-  .then(res => {
-    const [userInfo, addedCard] = res;
-    return [userInfo, addedCard];
-  })
 .then(([userInfo, addedCard]) => {
     cards.prepend(createCard(userInfo, addedCard));
     closePopup(popupAddCard);

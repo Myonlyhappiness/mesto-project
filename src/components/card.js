@@ -1,72 +1,44 @@
 import {openImgCard, openPopup, closePopup} from  '../components/modal.js'
-import {api} from '../components/api.js'
-import {renderLoading} from '../components/utils'
+import {renderLoading} from '../components/utils.js'
 
-const cards = document.querySelector(".cards");
 
 const deletePopup = document.querySelector(".popup-delete-card");
 const popupDeleteCardButton = document.querySelector(".popup-delete-card__button");
-let deletedCardId
-let deletedCardElement
-
-//Слушатель кнопки подтверждения удалния карточки
-/*popupDeleteCardButton.addEventListener("click", () => {
-  deleteCard(deletedCardId, deletedCardElement, deletePopup)
-})*/
+let deletedCardId;
+let deletedCardElement;
 
 class Card {
-  constuctor([userInfo, addedCard], selector) {
+  constructor(userInfo, addedCard, selector, api){
     this._userInfo = userInfo;
     this._addedCard = addedCard;
     this._selector = selector;
+    this.api = api;
   }
+
   _getElement() {
     const template = document.querySelector(this._selector);
     return template.content.querySelector(".card").cloneNode(true);
+
   }
-  _createCard() {
-    const card = this._getElement();
+    createCard() {
+    this._card = this._getElement();
+    this._cardLikeIconCounter = this._card.querySelector(".card__like-icon-counter")
+    this._cardLikeIconCounter.textContent = this._addedCard.likes.length;
+    this._cardPhoto = this._card.querySelector(".card__photo");
+    this._cardLikeIcon = this._card.querySelector(".card__like-icon");
+    this._card.querySelector(".card__caption-text").textContent = this._addedCard.name;
+    this._cardPhoto.src = this._addedCard.link;
+    this._cardPhoto.alt = this._addedCard.name;
+    this._setEventListeners();
+    this._checklikes();
+    this._checkTrashIcon();
+    return this._card;
   }
-}
-
-// Создание карточки
-/*function createCard(userInfo, addedCard) {
-  const card = template.querySelector(".card").cloneNode(true);
-  const cardPhoto = card.querySelector(".card__photo");
-  const deleteCardIcon = card.querySelector(".card__delete-icon");
-  const cardLikeIcon = card.querySelector(".card__like-icon");
-  const cardLikeIconCounter = card.querySelector(".card__like-icon-counter")
-  cardLikeIconCounter.textContent = addedCard.likes.length;
-  cardPhoto.src = addedCard.link;
-  cardPhoto.alt = addedCard.name;
-  card.querySelector(".card__caption-text").textContent = addedCard.name;
-  cardLikeIcon.addEventListener("click", () => likeCard(addedCard["_id"], cardLikeIcon, cardLikeIconCounter));
-  cardPhoto.addEventListener("click", openImgCard);
-  //Проверка лайка
-  addedCard.likes.forEach((like) => {
-    if(like["_id"] === userInfo['_id']){
-      cardLikeIcon.classList.add('card_liked');
-  }
-  })
-  //Удаление иконки корзины с чужой карточки
-   if(addedCard.owner['_id'] != userInfo['_id']){
-    deleteCardIcon.remove()
-   }
-   deleteCardIcon.addEventListener("click", () => {
-    openPopup(deletePopup)
-    deletedCardId = addedCard["_id"];
-    deletedCardElement = card;
-  });
-
-  return card;
-}*/
-
-
 
 // Функция обработки лайка карточки
-function likeCard(cardId, cardLikeIcon, cardLikeIconCounter) {
+_likeCard(cardId, cardLikeIcon, cardLikeIconCounter) {
   if (cardLikeIcon.classList.contains("card_liked")){
-    deleteLike(cardId)
+    this.api.deleteLike(cardId)
     .then((res) => {
       cardLikeIconCounter.textContent = res.likes.length;
       cardLikeIcon.classList.toggle("card_liked");
@@ -74,7 +46,7 @@ function likeCard(cardId, cardLikeIcon, cardLikeIconCounter) {
     .catch(error => console.log(error))
   }
 else {
-  setLike(cardId)
+  this.api.setLike(cardId)
     .then((res) => {
       cardLikeIconCounter.textContent = res.likes.length;
       cardLikeIcon.classList.toggle("card_liked");
@@ -83,10 +55,11 @@ else {
   }
 }
 
+
 // Функция обработки клика по иконке удаления
-function deleteCard(cardId, card, deletePopup) {
+_deleteCard(cardId, card, deletePopup) {
   renderLoading(true, popupDeleteCardButton);
-    eraseCard(cardId)
+  this.api.eraseCard(cardId)
   .then((res) => {
     card.remove();
     closePopup(deletePopup)
@@ -96,4 +69,49 @@ function deleteCard(cardId, card, deletePopup) {
   .finally(() => renderLoading(false, popupDeleteCardButton))
 }
 
-export {cards, deleteCard, createCard}
+_setEventListeners(){
+  this._cardLikeIcon.addEventListener("click", () => this._likeCard(this._addedCard["_id"], this._cardLikeIcon, this._cardLikeIconCounter));
+  this._cardPhoto.addEventListener("click", openImgCard);
+  //Слушатель кнопки подтверждения удалния карточки
+popupDeleteCardButton.addEventListener("click", () => {
+  this._deleteCard(deletedCardId, deletedCardElement, deletePopup)
+})
+}
+
+//Проверка лайка
+_checklikes(){
+this._addedCard.likes.forEach((like) => {
+  if(like["_id"] === this._userInfo['_id']){
+    this._cardLikeIcon.classList.add('card_liked');
+}
+})
+}
+
+//Удаление иконки корзины с чужой карточки
+_checkTrashIcon(){
+  const deleteCardIcon = this._card.querySelector(".card__delete-icon");
+if(this._addedCard.owner['_id'] != this._userInfo['_id']){
+  deleteCardIcon.remove()
+ }
+ deleteCardIcon.addEventListener("click", () => {
+  openPopup(deletePopup)
+  deletedCardId = this._addedCard["_id"];
+  deletedCardElement = this._card;
+});
+}
+
+}
+
+
+export {Card}
+
+
+
+
+
+
+
+
+
+
+
