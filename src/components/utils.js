@@ -1,5 +1,4 @@
 
-
 //Работа с DOM
 const cards = document.querySelector(".cards");
 const popupList = document.querySelectorAll(".popup");
@@ -19,7 +18,7 @@ const formAdd = document.forms.add;
 const formAddCardLink = formAdd.elements.link;
 const formAddCardName = formAdd.elements.name;
 const popupAddCard = document.querySelector(".popup-add-card");
-const settings =  {
+const formSelectors =  {
   formSelector:'form',
   inputSelector: 'popup__container-item',
   inputErrorClass: 'popup__container-item-error',
@@ -51,4 +50,4 @@ function renderLoading(isLoading, submitButtonText){
    }
 }
 
-export {cards, renderLoading, popupList, profileEditButton, profileAvatar, popupUpdateAvatar, formUpdateAvatar, formUpdateAvatarLink, profileName, profileJobInfo, formEdit, popupEdit, popupNameField, popupJobField, profileAddButton, formAdd, formAddCardLink, formAddCardName, popupAddCard, settings}
+export {cards, renderLoading, popupList, profileEditButton, profileAvatar, popupUpdateAvatar, formUpdateAvatar, formUpdateAvatarLink, profileName, profileJobInfo, formEdit, popupEdit, popupNameField, popupJobField, profileAddButton, formAdd, formAddCardLink, formAddCardName, popupAddCard, formSelectors}

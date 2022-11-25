@@ -1,9 +1,9 @@
 import '../pages/index.css';
 import {Card} from '../components/card.js'
 import {openPopup, closePopup} from  '../components/modal.js'
-import {enableValidation, resetInputsErrors} from '../components/validate.js'
+import {FormValidator} from '../components/validate.js'
 import {api} from '../components/api.js'
-import {cards, renderLoading, popupList, profileEditButton, profileAvatar, popupUpdateAvatar, formUpdateAvatar, formUpdateAvatarLink, profileName, profileJobInfo, formEdit, popupEdit, popupNameField, popupJobField, profileAddButton, formAdd, formAddCardLink, formAddCardName, popupAddCard, settings} from '../components/utils'
+import {cards, renderLoading, popupList, profileEditButton, profileAvatar, popupUpdateAvatar, formUpdateAvatar, formUpdateAvatarLink, profileName, profileJobInfo, formEdit, popupEdit, popupNameField, popupJobField, profileAddButton, formAdd, formAddCardLink, formAddCardName, popupAddCard, formSelectors} from '../components/utils'
 
 
 
@@ -19,8 +19,6 @@ Promise.all([api.getUserInfo(), api.getInitialCards()])
      });
 })
 .catch(error => console.log(error))
-
-enableValidation(settings);
 
 //Функция обработки формы профиля
 function editProfile(event) {
@@ -43,9 +41,10 @@ function addCard(event) {
   const submitButtonText = event.submitter;
   renderLoading(true, submitButtonText);
 
-  Promise.all([getUserInfo(), addNewCard(formAddCardLink.value, formAddCardName.value)])
+  Promise.all([api.getUserInfo(), api.addNewCard(formAddCardLink.value, formAddCardName.value)])
 .then(([userInfo, addedCard]) => {
-    cards.prepend(createCard(userInfo, addedCard));
+  const card = new Card(userInfo, addedCard, '#element', api);
+  cards.prepend(card.createCard());
     closePopup(popupAddCard);
   })
   .catch(error => console.log(error))
@@ -68,7 +67,8 @@ function updateAvatar(event) {
 
 //Слушатели событий
 profileAvatar.addEventListener("click", () => {
-  resetInputsErrors(formUpdateAvatar, settings);
+  const formAvatar = new FormValidator(formSelectors, formUpdateAvatar);
+  formAvatar.enableValidation();
   formUpdateAvatar.reset();
   openPopup(popupUpdateAvatar);
   })
@@ -76,12 +76,14 @@ profileAvatar.addEventListener("click", () => {
 profileEditButton.addEventListener("click", () => {
   popupNameField.value = profileName.textContent;
   popupJobField.value = profileJobInfo.textContent;
-  resetInputsErrors(formEdit, settings);
+  const formEditProfile = new FormValidator(formSelectors, formEdit);
+  formEditProfile.enableValidation();
   openPopup(popupEdit);
 });
 
 profileAddButton.addEventListener("click", () => {
-  resetInputsErrors(formAdd, settings);
+  const formAddCard = new FormValidator(formSelectors, formAdd);
+  formAddCard.enableValidation();
   formAdd.reset();
   openPopup(popupAddCard);
 });
