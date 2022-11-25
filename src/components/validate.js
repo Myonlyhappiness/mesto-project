@@ -2,8 +2,8 @@ class FormValidator {
   constructor(formSelectors, formElement){
     this._formSelectors = formSelectors;
     this._formElement = formElement;
-    this._inputList = Array.from(this._formElement.querySelectorAll(.${this._formSelectors['inputSelector']}));
-    this._buttonElement = this._formElement.querySelector(.${this._formSelectors['buttonSelector']});
+    this._inputList = Array.from(this._formElement.querySelectorAll(`.${this._formSelectors['inputSelector']}`));
+    this._buttonElement = this._formElement.querySelector(`.${this._formSelectors['buttonSelector']}`);
   }
 
   // Функция запуска валидации
@@ -57,7 +57,7 @@ class FormValidator {
 
   //Функция показа ошибки
     _showInputError(inputItem, errorMessage) {
-      const errorElement = this._formElement.querySelector(.${inputItem.id}-input-error);
+      const errorElement = this._formElement.querySelector(`.${inputItem.id}-input-error`);
       inputItem.classList.add(this._formSelectors['inputErrorClass']);
       errorElement.classList.add(this._formSelectors['inputErrorActiveClass']);
       errorElement.textContent = errorMessage;
@@ -65,7 +65,7 @@ class FormValidator {
 
   //Функция удаления ошибки
     _hideInputError(inputItem) {
-      const errorElement = this._formElement.querySelector(.${inputItem.id}-input-error);
+      const errorElement = this._formElement.querySelector(`.${inputItem.id}-input-error`);
       inputItem.classList.remove(this._formSelectors['inputErrorClass']);
       errorElement.classList.remove(this._formSelectors['inputErrorActiveClass']);
       errorElement.textContent = ' ';
@@ -74,11 +74,11 @@ class FormValidator {
   // Функция сброса ошибок полей и валидации(переключения) кнопки при открытии попапов
     _resetInputsErrors() {
       this._toggleButtonState();
-      Array.from(document.querySelectorAll(.${this._formSelectors['inputErrorActiveClass']})).forEach((item) => {
+      Array.from(document.querySelectorAll(`.${this._formSelectors['inputErrorActiveClass']}`)).forEach((item) => {
         item.classList.remove(this._formSelectors['inputErrorActiveClass']);
         item.textContent = '';
       })
-      Array.from(document.querySelectorAll(.${this._formSelectors['inputErrorClass']})).forEach((item) => {
+      Array.from(document.querySelectorAll(`.${this._formSelectors['inputErrorClass']}`)).forEach((item) => {
         item.classList.remove(this._formSelectors['inputErrorClass']);
       })
     }
