@@ -75,7 +75,7 @@ class Card {
     this._cardLikeIcon.addEventListener("click", () => this._likeCard(this._addedCard["_id"], this._cardLikeIcon, this._cardLikeIconCounter));
     this._cardPhoto.addEventListener("click", openImgCard);
 
-  //Слушатель кнопки подтверждения удалния карточки
+  //Слушатель кнопки подтверждения удаления карточки
     popupDeleteCardButton.addEventListener("click", () => {
       this._deleteCard(deletedCardId, deletedCardElement, deletePopup)
     })

@@ -1,8 +1,9 @@
 import '../pages/index.css';
 import {Card} from '../components/card.js'
 import {openPopup, closePopup} from  '../components/modal.js'
-import {FormValidator} from '../components/validate.js'
+import FormValidator from '../components/validate.js'
 import {api} from '../components/api.js'
+import Section from '../components/section.js'
 import {cards, renderLoading, popupList, profileEditButton, profileAvatar, popupUpdateAvatar, formUpdateAvatar, formUpdateAvatarLink, profileName, profileJobInfo, formEdit, popupEdit, popupNameField, popupJobField, profileAddButton, formAdd, formAddCardLink, formAddCardName, popupAddCard, formSelectors} from '../components/utils'
 
 
@@ -13,10 +14,16 @@ Promise.all([api.getUserInfo(), api.getInitialCards()])
   profileAvatar.src = userInfo['avatar'];
   profileName.textContent = userInfo.name;
   profileJobInfo.textContent = userInfo.about;
-  initialCards.reverse().forEach((item) => {
-    const card = new Card(userInfo, item, '#element', api);
-    cards.prepend(card.createCard());
-     });
+  const cardsList = new Section({
+      items: initialCards,
+      renderer: (item) => {
+        const card = new Card(userInfo, item, '#element', api);
+        const cardElement = card.createCard();
+        cardsList.addItem(cardElement);
+      }
+    }, cards)
+
+    cardsList.initialCardsRenderer();
 })
 .catch(error => console.log(error))
 
@@ -44,7 +51,8 @@ function addCard(event) {
   Promise.all([api.getUserInfo(), api.addNewCard(formAddCardLink.value, formAddCardName.value)])
 .then(([userInfo, addedCard]) => {
   const card = new Card(userInfo, addedCard, '#element', api);
-  cards.prepend(card.createCard());
+  const cardContainer = new Section ({}, cards)
+  cardContainer.addItem(card.createCard());
     closePopup(popupAddCard);
   })
   .catch(error => console.log(error))
