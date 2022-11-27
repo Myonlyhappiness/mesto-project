@@ -4,8 +4,8 @@ import {openPopup, closePopup} from  '../components/modal.js'
 import FormValidator from '../components/validate.js'
 import {api} from '../components/api.js'
 import Section from '../components/section.js'
+import PopupWithImage from '../components/popup-with-image.js'
 import {cards, renderLoading, popupList, profileEditButton, profileAvatar, popupUpdateAvatar, formUpdateAvatar, formUpdateAvatarLink, profileName, profileJobInfo, formEdit, popupEdit, popupNameField, popupJobField, profileAddButton, formAdd, formAddCardLink, formAddCardName, popupAddCard, formSelectors} from '../components/utils'
-
 
 
 // Получение данных пользователя (id) и отрисовка карточек
@@ -17,7 +17,11 @@ Promise.all([api.getUserInfo(), api.getInitialCards()])
   const cardsList = new Section({
       items: initialCards,
       renderer: (item) => {
-        const card = new Card(userInfo, item, '#element', api);
+        const card = new Card(userInfo, item, '#element', api, (event) => {
+          const popupImg = document.querySelector(".popup-img");
+          const popupWithImage = new PopupWithImage(popupImg);
+          popupWithImage.open(event);
+        });
         const cardElement = card.createCard();
         cardsList.addItem(cardElement);
       }
@@ -47,7 +51,6 @@ function addCard(event) {
   event.preventDefault();
   const submitButtonText = event.submitter;
   renderLoading(true, submitButtonText);
-
   Promise.all([api.getUserInfo(), api.addNewCard(formAddCardLink.value, formAddCardName.value)])
 .then(([userInfo, addedCard]) => {
   const card = new Card(userInfo, addedCard, '#element', api);

@@ -1,6 +1,4 @@
-import {openImgCard, openPopup, closePopup} from  '../components/modal.js'
 import {renderLoading} from '../components/utils.js'
-
 
 const deletePopup = document.querySelector(".popup-delete-card");
 const popupDeleteCardButton = document.querySelector(".popup-delete-card__button");
@@ -73,7 +71,7 @@ class Card {
   // Установка слушателей
   _setEventListeners(){
     this._cardLikeIcon.addEventListener("click", () => this._likeCard(this._addedCard["_id"], this._cardLikeIcon, this._cardLikeIconCounter));
-    this._cardPhoto.addEventListener("click", openImgCard);
+    this._cardPhoto.addEventListener("click", this.handleCardClick);
 
   //Слушатель кнопки подтверждения удаления карточки
     popupDeleteCardButton.addEventListener("click", () => {
