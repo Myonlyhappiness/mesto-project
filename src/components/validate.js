@@ -1,85 +1,85 @@
-export default class FormValidator {
-  constructor(formSelectors, formElement){
-    this._formSelectors = formSelectors;
-    this._formElement = formElement;
-    this._inputList = Array.from(this._formElement.querySelectorAll(`.${this._formSelectors['inputSelector']}`));
-    this._buttonElement = this._formElement.querySelector(`.${this._formSelectors['buttonSelector']}`);
+// Функция запуска валидации
+function enableValidation(settings){
+  const formList = Array.from(document.querySelectorAll(`.${settings['formSelector']}`));
+    formList.forEach((formElement) => setEventListeners(formElement, settings));
+    }
+
+//Функция установки слушателей на поля ввода
+function setEventListeners(formElement, settings) {
+  const inputList = Array.from(formElement.querySelectorAll(`.${settings['inputSelector']}`));
+  const buttonElement = formElement.querySelector(`.${settings['buttonSelector']}`);
+  inputList.forEach((inputItem) => {
+    inputItem.addEventListener('input', function () {
+      checkInputValidity(formElement, inputItem, settings);
+      toggleButtonState(inputList, buttonElement, settings);
+      });
+    });
+}
+
+//Функция валидации(переключения) кнопки
+function toggleButtonState(inputList, buttonElement, settings) {
+  if(hasInvalidInput(inputList)){
+    buttonElement.classList.add(settings['buttonInactiveClass'])
+    buttonElement.disabled = true;
+  }
+   else{
+    buttonElement.classList.remove(settings['buttonInactiveClass']);
+    buttonElement.disabled = false;
+  }
+}
+
+//Функция проверки всех полей
+function hasInvalidInput(inputList) {
+  return inputList.some((item) => !item.validity.valid);
+}
+
+//Функция валидации
+function checkInputValidity(formElement, inputItem, settings) {
+  if(inputItem.validity.patternMismatch){
+    inputItem.setCustomValidity(inputItem.dataset.errorMessage)}
+    else{
+      inputItem.setCustomValidity("");
+    }
+
+  if(!inputItem.validity.valid){
+    showInputError(formElement, inputItem, settings, inputItem.validationMessage);
+  }
+  else {
+    hideInputError(formElement, inputItem, settings);
+  }
   }
 
-  // Функция запуска валидации
-    enableValidation(){
-      this._resetInputsErrors();
-      this._setEventListeners();
-      }
-
-  //Функция установки слушателей на поля ввода
-    _setEventListeners() {
-      this._inputList.forEach((inputItem) => {
-        inputItem.addEventListener('input', () => {
-          this._checkInputValidity(inputItem);
-          this._toggleButtonState();
-          });
-        });
-    }
-
-  //Функция валидации(переключения) кнопки
-    _toggleButtonState() {
-      if(this._hasInvalidInput()){
-        this._buttonElement.classList.add(this._formSelectors['buttonInactiveClass'])
-        this._buttonElement.disabled = true;
-      }
-      else{
-        this._buttonElement.classList.remove(this._formSelectors['buttonInactiveClass']);
-        this._buttonElement.disabled = false;
-      }
-    }
-
-  //Функция проверки всех полей
-    _hasInvalidInput() {
-      return this._inputList.some((item) => !item.validity.valid);
-}
-
-  //Функция валидации
-    _checkInputValidity(inputItem) {
-      if(inputItem.validity.patternMismatch){
-        inputItem.setCustomValidity(inputItem.dataset.errorMessage)}
-      else{
-        inputItem.setCustomValidity("");
-      }
-
-      if(!inputItem.validity.valid){
-        this._showInputError(inputItem, inputItem.validationMessage);
-      }
-      else {
-        this._hideInputError(inputItem);
-      }
-    }
-
   //Функция показа ошибки
-    _showInputError(inputItem, errorMessage) {
-      const errorElement = this._formElement.querySelector(`.${inputItem.id}-input-error`);
-      inputItem.classList.add(this._formSelectors['inputErrorClass']);
-      errorElement.classList.add(this._formSelectors['inputErrorActiveClass']);
-      errorElement.textContent = errorMessage;
+function showInputError(formElement, inputItem, settings, errorMessage) {
+  const errorElement = formElement.querySelector(`.${inputItem.id}-input-error`);
+  inputItem.classList.add(settings['inputErrorClass']);
+  errorElement.classList.add(settings['inputErrorActiveClass']);
+  errorElement.textContent = errorMessage;
 }
 
-  //Функция удаления ошибки
-    _hideInputError(inputItem) {
-      const errorElement = this._formElement.querySelector(`.${inputItem.id}-input-error`);
-      inputItem.classList.remove(this._formSelectors['inputErrorClass']);
-      errorElement.classList.remove(this._formSelectors['inputErrorActiveClass']);
-      errorElement.textContent = ' ';
-    }
-
-  // Функция сброса ошибок полей и валидации(переключения) кнопки при открытии попапов
-    _resetInputsErrors() {
-      this._toggleButtonState();
-      Array.from(document.querySelectorAll(`.${this._formSelectors['inputErrorActiveClass']}`)).forEach((item) => {
-        item.classList.remove(this._formSelectors['inputErrorActiveClass']);
-        item.textContent = '';
-      })
-      Array.from(document.querySelectorAll(`.${this._formSelectors['inputErrorClass']}`)).forEach((item) => {
-        item.classList.remove(this._formSelectors['inputErrorClass']);
-      })
-    }
+//Функция удаления ошибки
+function hideInputError(formElement, inputItem, settings) {
+  const errorElement = formElement.querySelector(`.${inputItem.id}-input-error`);
+  inputItem.classList.remove(settings['inputErrorClass']);
+  errorElement.classList.remove(settings['inputErrorActiveClass']);
+  errorElement.textContent = ' ';
 }
+
+// Функция сброса ошибок полей и валидации(переключения) кнопки при открытии попапов
+function resetInputsErrors(formElement, settings) {
+  const inputList = Array.from(formElement.querySelectorAll(`.${settings['inputSelector']}`));
+  const buttonElement = formElement.querySelector(`.${settings['buttonSelector']}`);
+
+ toggleButtonState(inputList, buttonElement, settings);
+
+  Array.from(document.querySelectorAll(`.${settings['inputErrorActiveClass']}`)).forEach((item) => {
+    item.classList.remove(settings['inputErrorActiveClass']);
+    item.textContent = '';
+  })
+  Array.from(document.querySelectorAll(`.${settings['inputErrorClass']}`)).forEach((item) => {
+    item.classList.remove(settings['inputErrorClass']);
+  })
+}
+
+
+export {enableValidation, resetInputsErrors}
