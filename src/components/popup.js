@@ -30,7 +30,8 @@ export default class Popup {
   }
 
   _setEventListeners(){
-    this._selector.addEventListener("mousedown", this._closePopupBackgroundClick.bind(this));
-    document.addEventListener("keydown", this._handleEscClose.bind(this));
+    this._selector.addEventListener("mousedown", (event) => this._closePopupBackgroundClick(event));
+    this._selector.querySelector(".popup__close-button").addEventListener("click", () => this.close(this._selector))
+    document.addEventListener("keydown", (event) => this._handleEscClose(event));
   }
 }

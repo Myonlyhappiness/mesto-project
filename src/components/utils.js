@@ -1,9 +1,9 @@
 
 //Работа с DOM
 const cards = document.querySelector(".cards");
-const popupList = document.querySelectorAll(".popup");
 const profileEditButton = document.querySelector(".profile__info-edit");
 const profileAvatar = document.querySelector(".profile__avatar");
+const deletePopup = document.querySelector(".popup-delete-card");
 const popupUpdateAvatar = document.querySelector(".popup-update-avatar");
 const formUpdateAvatar = document.forms.avatar;
 const formUpdateAvatarLink = formUpdateAvatar.elements.link;
@@ -14,9 +14,6 @@ const popupEdit = document.querySelector(".popup-edit");
 const popupNameField = popupEdit.querySelector("#name");
 const popupJobField = popupEdit.querySelector("#job");
 const profileAddButton = document.querySelector(".profile__add-button");
-const formAdd = document.forms.add;
-const formAddCardLink = formAdd.elements.link;
-const formAddCardName = formAdd.elements.name;
 const popupAddCard = document.querySelector(".popup-add-card");
 const formSelectors =  {
   formSelector:'form',
@@ -50,4 +47,4 @@ function renderLoading(isLoading, submitButtonText){
    }
 }
 
-export {cards, renderLoading, popupList, profileEditButton, profileAvatar, popupUpdateAvatar, formUpdateAvatar, formUpdateAvatarLink, profileName, profileJobInfo, formEdit, popupEdit, popupNameField, popupJobField, profileAddButton, formAdd, formAddCardLink, formAddCardName, popupAddCard, formSelectors}
+export {cards, renderLoading, profileEditButton, profileAvatar, popupUpdateAvatar, formUpdateAvatar, formUpdateAvatarLink, profileName, profileJobInfo, formEdit, popupEdit, popupNameField, popupJobField, profileAddButton, popupAddCard, formSelectors, deletePopup}

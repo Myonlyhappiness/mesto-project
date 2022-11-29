@@ -1,17 +1,13 @@
 import {renderLoading} from '../components/utils.js'
 
-const deletePopup = document.querySelector(".popup-delete-card");
-const popupDeleteCardButton = document.querySelector(".popup-delete-card__button");
-let deletedCardId;
-let deletedCardElement;
-
 class Card {
-  constructor(userInfo, addedCard, selector, api, handleCardClick){
+  constructor(userInfo, addedCard, selector, api, handleCardClick, handleDeleteIconClick){
     this._userInfo = userInfo;
     this._addedCard = addedCard;
     this._selector = selector;
     this.api = api;
     this.handleCardClick = handleCardClick;
+    this.handleDeleteIconClick = handleDeleteIconClick;
   }
 
   _getElement() {
@@ -25,11 +21,12 @@ class Card {
     this._cardLikeIconCounter.textContent = this._addedCard.likes.length;
     this._cardPhoto = this._card.querySelector(".card__photo");
     this._cardLikeIcon = this._card.querySelector(".card__like-icon");
+    this._deleteCardIcon = this._card.querySelector(".card__delete-icon");
     this._card.querySelector(".card__caption-text").textContent = this._addedCard.name;
     this._cardPhoto.src = this._addedCard.link;
     this._cardPhoto.alt = this._addedCard.name;
-    this._setEventListeners();
     this._checklikes();
+    this._setEventListeners();
     this._checkTrashIcon();
     return this._card;
   }
@@ -54,29 +51,11 @@ class Card {
     }
   }
 
-
-  // Функция обработки клика по иконке удаления
-  _deleteCard(cardId, card, deletePopup) {
-    renderLoading(true, popupDeleteCardButton);
-    this.api.eraseCard(cardId)
-      .then((res) => {
-        card.remove();
-        closePopup(deletePopup)
-        console.log(res.message)
-      })
-      .catch(error => console.log(error))
-      .finally(() => renderLoading(false, popupDeleteCardButton))
-  }
-
   // Установка слушателей
   _setEventListeners(){
     this._cardLikeIcon.addEventListener("click", () => this._likeCard(this._addedCard["_id"], this._cardLikeIcon, this._cardLikeIconCounter));
     this._cardPhoto.addEventListener("click", this.handleCardClick);
-
-  //Слушатель кнопки подтверждения удаления карточки
-    popupDeleteCardButton.addEventListener("click", () => {
-      this._deleteCard(deletedCardId, deletedCardElement, deletePopup)
-    })
+    this._deleteCardIcon.addEventListener("click", () => this.handleDeleteIconClick(this._addedCard["_id"], this._card));
   }
 
   //Проверка лайка
@@ -90,20 +69,11 @@ class Card {
 
   //Удаление иконки корзины с чужой карточки
   _checkTrashIcon(){
-    const deleteCardIcon = this._card.querySelector(".card__delete-icon");
     if(this._addedCard.owner['_id'] != this._userInfo['_id']){
-      deleteCardIcon.remove()
+      this._deleteCardIcon.remove()
     }
-    deleteCardIcon.addEventListener("click", () => {
-      openPopup(deletePopup)
-      deletedCardId = this._addedCard["_id"];
-      deletedCardElement = this._card;
-    });
   }
-
 }
-
-
 export {Card}
 
 
