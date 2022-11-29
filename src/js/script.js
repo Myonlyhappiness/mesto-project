@@ -1,53 +1,67 @@
 import '../pages/index.css';
-import {Card} from '../components/card.js'
-import FormValidator from '../components/validate.js'
-import {api} from '../components/api.js'
-import Section from '../components/section.js'
-import PopupWithImage from '../components/popupWithImage.js'
-import PopupWithForm from '../components/popupWidthForm.js'
-import PopupDeleteCard from '../components/popupDeleteCard.js'
-import UserInfo from '../components/userInfo.js'
-import {cards, renderLoading, profileEditButton, profileAvatar, popupUpdateAvatar, formUpdateAvatar, formUpdateAvatarLink, profileName, profileJobInfo, formEdit, popupEdit, popupNameField, popupJobField, profileAddButton, popupAddCard, formSelectors, deletePopup} from '../components/utils'
+import {cards, createCard} from '../components/card.js'
+import {openPopup, closePopup} from  '../components/modal.js'
+import {enableValidation, resetInputsErrors} from '../components/validate.js'
+import {getUserInfo, getInitialCards, updateUserInfo, addNewCard, updateUserAvatar} from '../components/api.js'
+import {renderLoading} from '../components/utils'
 
+//Работа с DOM
+const popupList = document.querySelectorAll(".popup");
+const profileEditButton = document.querySelector(".profile__info-edit");
+const profileAvatar = document.querySelector(".profile__avatar");
+const popupUpdateAvatar = document.querySelector(".popup-update-avatar");
+const formUpdateAvatar = document.forms.avatar;
+const formUpdateAvatarLink = formUpdateAvatar.elements.link;
+const profileName = document.querySelector(".profile__name");
+const profileJobInfo = document.querySelector(".profile__job-info");
+const formEdit = document.forms.edit;
+const popupEdit = document.querySelector(".popup-edit");
+const popupNameField = popupEdit.querySelector("#name");
+const popupJobField = popupEdit.querySelector("#job");
+const profileAddButton = document.querySelector(".profile__add-button");
+const formAdd = document.forms.add;
+const formAddCardLink = formAdd.elements.link;
+const formAddCardName = formAdd.elements.name;
+const popupAddCard = document.querySelector(".popup-add-card");
+const settings =  {
+  formSelector:'form',
+  inputSelector: 'popup__container-item',
+  inputErrorClass: 'popup__container-item-error',
+  inputErrorActiveClass: 'popup__container-item-error_active',
+  buttonSelector: 'popup__container-button',
+  buttonInactiveClass: 'popup__container-button_inactive'
+}
 
-const userInfo = new UserInfo({profileName, profileJobInfo}, api);
+// Получение данный пользователя (id) и отрисовка карточек
+Promise.all([getUserInfo(), getInitialCards()])
+.then(res => {
+  const [userInfo, initialCards] = res;
+  return [userInfo, initialCards];
 
-// Получение данных пользователя (id) и отрисовка карточек
-Promise.all([api.getUserInfo(), api.getInitialCards()])
+})
 .then(([userInfo, initialCards]) => {
   profileAvatar.src = userInfo['avatar'];
   profileName.textContent = userInfo.name;
   profileJobInfo.textContent = userInfo.about;
-  const cardsList = new Section({
-      items: initialCards,
-      renderer: (item) => {
-        const card = new Card(userInfo, item, '#element', api, (event) => {
-          const popupImg = document.querySelector(".popup-img");
-          const popupWithImage = new PopupWithImage(popupImg);
-          popupWithImage.open(event);
-        },
-        (delCardId, delCardElement) => {
-          const popupDeleteCard = new PopupDeleteCard(deletePopup, function() {
-            deleteCard(delCardId, delCardElement, popupDeleteCard);
-          });
-          popupDeleteCard.open();
-        }
-        );
-        const cardElement = card.createCard();
-        cardsList.addItem(cardElement);
-      }
-    }, cards)
-
-    cardsList.initialCardsRenderer();
+  initialCards.reverse().forEach((item) => {
+    cards.prepend(createCard(userInfo, item));
+     });
 })
 .catch(error => console.log(error))
+
+enableValidation(settings);
 
 //Функция обработки формы профиля
 function editProfile(event) {
   event.preventDefault();
   const submitButtonText = event.submitter;
   renderLoading(true, submitButtonText);
-  userInfo.setUserInfo(popupNameField, popupJobField, () => this.close())
+  updateUserInfo(popupNameField.value, popupJobField.value)
+  .then((res) => {
+  profileName.textContent = res.name;
+  profileJobInfo.textContent = res.about;
+  closePopup(popupEdit);
+  })
   .catch(error => console.log(error))
   .finally(() => renderLoading(false, submitButtonText))
 }
@@ -57,43 +71,18 @@ function addCard(event) {
   event.preventDefault();
   const submitButtonText = event.submitter;
   renderLoading(true, submitButtonText);
-  this._getInputValues();
-  Promise.all([api.getUserInfo(), api.addNewCard(this._formAddCardLink, this._formAddCardName)])
+
+  Promise.all([getUserInfo(), addNewCard(formAddCardLink.value, formAddCardName.value)])
+  .then(res => {
+    const [userInfo, addedCard] = res;
+    return [userInfo, addedCard];
+  })
 .then(([userInfo, addedCard]) => {
-  const card = new Card(userInfo, addedCard, '#element', api,
-  (event) => {
-    const popupImg = document.querySelector(".popup-img");
-    const popupWithImage = new PopupWithImage(popupImg);
-    popupWithImage.open(event);
-  },
-
-  (delCardId, delCardElement) => {
-    const popupDeleteCard = new PopupDeleteCard(deletePopup, function() {
-      deleteCard(delCardId, delCardElement, popupDeleteCard)
-    });
-    popupDeleteCard.open();
-  });
-
-  const cardContainer = new Section ({}, cards)
-  cardContainer.addItem(card.createCard());
-    this.close();
+    cards.prepend(createCard(userInfo, addedCard));
+    closePopup(popupAddCard);
   })
   .catch(error => console.log(error))
   .finally(() => renderLoading(false, submitButtonText))
-}
-
-
-// Функция обработки клика по иконке удаления
-function deleteCard(cardId, card, popup) {
-  renderLoading(true, popup.popupDeleteCardButton);
-  api.eraseCard(cardId)
-    .then((res) => {
-      card.remove();
-      popup.close();
-      console.log(res.message);
-    })
-    .catch(error => console.log(error))
-    .finally(() => renderLoading(false, popup.popupDeleteCardButton))
 }
 
 //Функция обновления аватара пользователя
@@ -101,11 +90,10 @@ function updateAvatar(event) {
   event.preventDefault();
   const submitButtonText = event.submitter;
   renderLoading(true, submitButtonText);
-  api.updateUserAvatar(formUpdateAvatarLink.value)
+  updateUserAvatar(formUpdateAvatarLink.value)
   .then((res) => {
-    console.log(res);
     profileAvatar.src = res['avatar'];
-    this.close();
+    closePopup(popupUpdateAvatar);
   })
   .catch(error => console.log(error))
   .finally(() => renderLoading(false, submitButtonText))
@@ -113,28 +101,28 @@ function updateAvatar(event) {
 
 //Слушатели событий
 profileAvatar.addEventListener("click", () => {
-  const formAvatar = new FormValidator(formSelectors, formUpdateAvatar);
-  formAvatar.enableValidation();
-  const popupWithForm = new PopupWithForm(popupUpdateAvatar, updateAvatar);
-  popupWithForm.open();
+  resetInputsErrors(formUpdateAvatar, settings);
+  formUpdateAvatar.reset();
+  openPopup(popupUpdateAvatar);
   })
 
-profileEditButton.addEventListener("click", () => {
-  userInfo.getUserInfo().then((res) => {
-    popupNameField.value = res.name;
-    popupJobField.value = res.about;
-    const formEditProfile = new FormValidator(formSelectors, formEdit);
-    formEditProfile.enableValidation();
-    const popupWithForm = new PopupWithForm(popupEdit, editProfile);
-    popupWithForm.open();
-})
-.catch(error => console.log(error));
-  })
+profileEditButton.addEventListener("click", (event) => {
+  popupNameField.value = profileName.textContent;
+  popupJobField.value = profileJobInfo.textContent;
+  resetInputsErrors(formEdit, settings);
+  openPopup(popupEdit);
+});
 
 profileAddButton.addEventListener("click", () => {
-  const formAdd = document.forms.add;
-  const formAddCard = new FormValidator(formSelectors, formAdd);
-  formAddCard.enableValidation();
-  const popupWithForm = new PopupWithForm(popupAddCard, addCard);
-  popupWithForm.open();
+  resetInputsErrors(formAdd, settings);
+  formAdd.reset();
+  openPopup(popupAddCard);
 });
+
+popupList.forEach((popup) =>
+  popup.querySelector(".popup__close-button").addEventListener("click", () => closePopup(popup))
+);
+
+formEdit.addEventListener("submit", editProfile);
+formAdd.addEventListener("submit", addCard);
+formUpdateAvatar.addEventListener("submit", updateAvatar);
