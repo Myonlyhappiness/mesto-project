@@ -103,7 +103,6 @@ function updateAvatar(event) {
   renderLoading(true, submitButtonText);
   api.updateUserAvatar(formUpdateAvatarLink.value)
   .then((res) => {
-    console.log(res);
     profileAvatar.src = res['avatar'];
     this.close();
   })
