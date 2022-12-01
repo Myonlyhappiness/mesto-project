@@ -8,7 +8,6 @@ export default class FormValidator {
 
   // Функция запуска валидации
     enableValidation(){
-      this._resetInputsErrors();
       this._setEventListeners();
       }
 
@@ -72,7 +71,7 @@ export default class FormValidator {
     }
 
   // Функция сброса ошибок полей и валидации(переключения) кнопки при открытии попапов
-    _resetInputsErrors() {
+    resetInputsErrors() {
       this._toggleButtonState();
       Array.from(document.querySelectorAll(`.${this._formSelectors['inputErrorActiveClass']}`)).forEach((item) => {
         item.classList.remove(this._formSelectors['inputErrorActiveClass']);

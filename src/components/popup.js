@@ -1,19 +1,20 @@
 export default class Popup {
   constructor(selector){
-    this._selector = selector;
+    this._popup = document.querySelector(selector);
     this._generalSelector = document.querySelector(".general");
+    this._handleEscClose = this._handleEscClose.bind(this);
+    this._closePopupBackgroundClick = this._closePopupBackgroundClick.bind(this)
   }
 
   open(){
   this._generalSelector.style.overflowY = "hidden";
-  this._selector.classList.add("popup_opened");
-  this._setEventListeners();
+  this._popup.classList.add("popup_opened");
+  document.addEventListener("keydown", this._handleEscClose);
 }
 
   close(){
   this._generalSelector.style.overflow = "";
-  this._selector.classList.remove("popup_opened");
-  this._selector.removeEventListener("mousedown", this._closePopupBackgroundClick);
+  this._popup.classList.remove("popup_opened");
   document.removeEventListener("keydown", this._handleEscClose);
 }
 
@@ -29,9 +30,8 @@ export default class Popup {
     {this.close()};
   }
 
-  _setEventListeners(){
-    this._selector.addEventListener("mousedown", (event) => this._closePopupBackgroundClick(event));
-    this._selector.querySelector(".popup__close-button").addEventListener("click", () => this.close(this._selector))
-    document.addEventListener("keydown", (event) => this._handleEscClose(event));
+  setEventListeners(){
+    this._popup.addEventListener("mousedown", this._closePopupBackgroundClick);
+    this._popup.querySelector(".popup__close-button").addEventListener("click", () => this.close())
   }
 }

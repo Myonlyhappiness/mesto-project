@@ -1,5 +1,5 @@
 import '../pages/index.css';
-import {Card} from '../components/card.js'
+import Card from '../components/card.js'
 import FormValidator from '../components/validate.js'
 import {api} from '../components/api.js'
 import Section from '../components/section.js'
@@ -7,38 +7,51 @@ import PopupWithImage from '../components/popupWithImage.js'
 import PopupWithForm from '../components/popupWidthForm.js'
 import PopupDeleteCard from '../components/popupDeleteCard.js'
 import UserInfo from '../components/userInfo.js'
-import {cards, renderLoading, profileEditButton, profileAvatar, popupUpdateAvatar, formUpdateAvatar, formUpdateAvatarLink, profileName, profileJobInfo, formEdit, popupEdit, popupNameField, popupJobField, profileAddButton, popupAddCard, formSelectors, deletePopup} from '../components/utils'
+import {cards, renderLoading, profileEditButton, profileAvatar, formUpdateAvatar, formUpdateAvatarLink, profileName, profileJobInfo, formEdit, popupNameField, popupJobField, profileAddButton, formSelectors, formAdd, popupSelectors} from '../components/utils'
 
 
-const userInfo = new UserInfo({profileName, profileJobInfo}, api);
+//Создание экземпляров классов
+const userInformation = new UserInfo(profileAvatar, profileName, profileJobInfo);
+const popupWithImage = new PopupWithImage(popupSelectors.popupImg);
+const validateformAvatar = new FormValidator(formSelectors, formUpdateAvatar);
+const validateformEditProfile = new FormValidator(formSelectors, formEdit);
+const validateformAddCard = new FormValidator(formSelectors, formAdd);
+const popupEditAvatar = new PopupWithForm(popupSelectors.popupUpdateAvatar, updateAvatar);
+const popupEditProfile = new PopupWithForm(popupSelectors.popupEdit, editProfile);
+const popupAddNewCard = new PopupWithForm(popupSelectors.popupAddCard, addCard);
+const popupDeleteCard = new PopupDeleteCard(popupSelectors.deletePopup, function(){
+  deleteCard(this.cardId, this.card, popupDeleteCard)
+});
+const renderItem = new Section (cards, (item, userInfo) => {
+  const card = new Card(userInfo, item, '#element', api, (event) => {
+    popupWithImage.open(event);
+  },
+  (delCardId, delCardElement) => {
+    popupDeleteCard.open();
+    popupDeleteCard.setSubmitHandler(delCardId, delCardElement)
+
+  }
+  );
+  return card.createCard();
+
+})
+
+//Вызов методов
+popupWithImage.setEventListeners();
+popupEditAvatar.setEventListeners();
+popupEditProfile.setEventListeners();
+popupAddNewCard.setEventListeners();
+popupDeleteCard.setEventListeners();
+validateformAvatar.enableValidation();
+validateformEditProfile.enableValidation();
+validateformAddCard.enableValidation();
 
 // Получение данных пользователя (id) и отрисовка карточек
 Promise.all([api.getUserInfo(), api.getInitialCards()])
 .then(([userInfo, initialCards]) => {
-  profileAvatar.src = userInfo['avatar'];
-  profileName.textContent = userInfo.name;
-  profileJobInfo.textContent = userInfo.about;
-  const cardsList = new Section({
-      items: initialCards,
-      renderer: (item) => {
-        const card = new Card(userInfo, item, '#element', api, (event) => {
-          const popupImg = document.querySelector(".popup-img");
-          const popupWithImage = new PopupWithImage(popupImg);
-          popupWithImage.open(event);
-        },
-        (delCardId, delCardElement) => {
-          const popupDeleteCard = new PopupDeleteCard(deletePopup, function() {
-            deleteCard(delCardId, delCardElement, popupDeleteCard);
-          });
-          popupDeleteCard.open();
-        }
-        );
-        const cardElement = card.createCard();
-        cardsList.addItem(cardElement);
-      }
-    }, cards)
-
-    cardsList.initialCardsRenderer();
+  userInformation.setUserInfo(userInfo);
+  userInformation.setUserAvatar(userInfo);
+  renderItem.initialCardsRenderer(initialCards, userInfo);
 })
 .catch(error => console.log(error))
 
@@ -47,7 +60,11 @@ function editProfile(event) {
   event.preventDefault();
   const submitButtonText = event.submitter;
   renderLoading(true, submitButtonText);
-  userInfo.setUserInfo(popupNameField, popupJobField, () => this.close())
+  api.updateUserInfo(popupNameField.value, popupJobField.value)
+  .then((userInfo) => {
+    userInformation.setUserInfo(userInfo);
+  this.close()
+})
   .catch(error => console.log(error))
   .finally(() => renderLoading(false, submitButtonText))
 }
@@ -57,25 +74,11 @@ function addCard(event) {
   event.preventDefault();
   const submitButtonText = event.submitter;
   renderLoading(true, submitButtonText);
-  this._getInputValues();
-  Promise.all([api.getUserInfo(), api.addNewCard(this._formAddCardLink, this._formAddCardName)])
+  this.getInputValues();
+  Promise.all([api.getUserInfo(), api.addNewCard(this._formValues.link, this._formValues.name)])
 .then(([userInfo, addedCard]) => {
-  const card = new Card(userInfo, addedCard, '#element', api,
-  (event) => {
-    const popupImg = document.querySelector(".popup-img");
-    const popupWithImage = new PopupWithImage(popupImg);
-    popupWithImage.open(event);
-  },
-
-  (delCardId, delCardElement) => {
-    const popupDeleteCard = new PopupDeleteCard(deletePopup, function() {
-      deleteCard(delCardId, delCardElement, popupDeleteCard)
-    });
-    popupDeleteCard.open();
-  });
-
-  const cardContainer = new Section ({}, cards)
-  cardContainer.addItem(card.createCard());
+  const cardItem = renderItem.renderer(addedCard, userInfo);
+  renderItem.addItem(cardItem);
     this.close();
   })
   .catch(error => console.log(error))
@@ -102,8 +105,8 @@ function updateAvatar(event) {
   const submitButtonText = event.submitter;
   renderLoading(true, submitButtonText);
   api.updateUserAvatar(formUpdateAvatarLink.value)
-  .then((res) => {
-    profileAvatar.src = res['avatar'];
+  .then((userInfo) => {
+    userInformation.setUserAvatar(userInfo);
     this.close();
   })
   .catch(error => console.log(error))
@@ -112,28 +115,20 @@ function updateAvatar(event) {
 
 //Слушатели событий
 profileAvatar.addEventListener("click", () => {
-  const formAvatar = new FormValidator(formSelectors, formUpdateAvatar);
-  formAvatar.enableValidation();
-  const popupWithForm = new PopupWithForm(popupUpdateAvatar, updateAvatar);
-  popupWithForm.open();
-  })
-
-profileEditButton.addEventListener("click", () => {
-  userInfo.getUserInfo().then((res) => {
-    popupNameField.value = res.name;
-    popupJobField.value = res.about;
-    const formEditProfile = new FormValidator(formSelectors, formEdit);
-    formEditProfile.enableValidation();
-    const popupWithForm = new PopupWithForm(popupEdit, editProfile);
-    popupWithForm.open();
+validateformAvatar.resetInputsErrors();
+popupEditAvatar.open();
 })
-.catch(error => console.log(error));
-  })
 
 profileAddButton.addEventListener("click", () => {
-  const formAdd = document.forms.add;
-  const formAddCard = new FormValidator(formSelectors, formAdd);
-  formAddCard.enableValidation();
-  const popupWithForm = new PopupWithForm(popupAddCard, addCard);
-  popupWithForm.open();
-});
+  validateformAddCard.resetInputsErrors();
+  popupAddNewCard.open()});
+
+profileEditButton.addEventListener("click", () => {
+  validateformEditProfile.resetInputsErrors();
+    const userData = userInformation.getUserInfo();
+    popupNameField.value = userData.profileName.textContent;
+    popupJobField.value = userData.profileJobInfo.textContent;
+    popupEditProfile.open();
+  })
+
+
