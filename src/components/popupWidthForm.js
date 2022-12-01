@@ -4,12 +4,13 @@ export default class PopupWithForm extends Popup{
   constructor(selector, formCallback){
     super(selector)
     this._formCallback = formCallback;
-    this._form = selector.querySelector("form");
+    this._form = this._popup.querySelector("form");
+    this._inputList = Array.from(this._form.elements)
   }
 
-  _getInputValues(){
-    this._formAddCardLink = this._form.elements.link.value;
-    this._formAddCardName = this._form.elements.link.name;
+  getInputValues(){
+    this._formValues = {}
+    this._inputList.forEach(input => this._formValues[input.name] = input.value)
   }
 
   open(){
@@ -19,11 +20,11 @@ export default class PopupWithForm extends Popup{
   close(){
     super.close();
     setTimeout(() => this._form.reset(), 200);
-    this._form.removeEventListener("submit", this._formCallback);
+
   }
 
-  _setEventListeners() {
-    super._setEventListeners();
+  setEventListeners() {
+    super.setEventListeners();
     this._formCallback = this._formCallback.bind(this);
     this._form.addEventListener("submit", this._formCallback);
   }
