@@ -1,20 +1,25 @@
 
 //Работа с DOM
-const cards = document.querySelector(".cards");
+const cards = ".cards";
 const profileEditButton = document.querySelector(".profile__info-edit");
 const profileAvatar = document.querySelector(".profile__avatar");
-const deletePopup = document.querySelector(".popup-delete-card");
-const popupUpdateAvatar = document.querySelector(".popup-update-avatar");
 const formUpdateAvatar = document.forms.avatar;
 const formUpdateAvatarLink = formUpdateAvatar.elements.link;
 const profileName = document.querySelector(".profile__name");
 const profileJobInfo = document.querySelector(".profile__job-info");
+const formAdd = document.forms.add;
 const formEdit = document.forms.edit;
-const popupEdit = document.querySelector(".popup-edit");
-const popupNameField = popupEdit.querySelector("#name");
-const popupJobField = popupEdit.querySelector("#job");
+const popupNameField = document.querySelector("#name");
+const popupJobField = document.querySelector("#job");
 const profileAddButton = document.querySelector(".profile__add-button");
-const popupAddCard = document.querySelector(".popup-add-card");
+
+const popupSelectors = {
+  deletePopup: '.popup-delete-card',
+  popupUpdateAvatar: '.popup-update-avatar',
+  popupEdit: '.popup-edit',
+  popupAddCard: '.popup-add-card',
+  popupImg: '.popup-img'
+}
 const formSelectors =  {
   formSelector:'form',
   inputSelector: 'popup__container-item',
@@ -47,4 +52,4 @@ function renderLoading(isLoading, submitButtonText){
    }
 }
 
-export {cards, renderLoading, profileEditButton, profileAvatar, popupUpdateAvatar, formUpdateAvatar, formUpdateAvatarLink, profileName, profileJobInfo, formEdit, popupEdit, popupNameField, popupJobField, profileAddButton, popupAddCard, formSelectors, deletePopup}
+export {cards, renderLoading, profileEditButton, profileAvatar, formUpdateAvatar, formUpdateAvatarLink, profileName, profileJobInfo, formEdit, popupNameField, popupJobField, profileAddButton, formSelectors, formAdd, popupSelectors}

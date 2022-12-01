@@ -1,20 +1,25 @@
 export default class UserInfo {
-  constructor({profileName, profileJobInfo}, api){
-    this._profileName = profileName
-    this._profileJobInfo = profileJobInfo
-    this._api = api
+  constructor(profileAvatar, profileName, profileJobInfo){
+  this.profileAvatar = profileAvatar
+  this.profileName = profileName;
+  this.profileJobInfo = profileJobInfo;
   }
 
   getUserInfo(){
-    return this._api.getUserInfo();
+    this._userData = {};
+    this._userData.profileAvatar = this.profileAvatar;
+    this._userData.profileName = this.profileName;
+    this._userData.profileJobInfo = this.profileJobInfo;
+    return this._userData;
   }
 
-  setUserInfo(popupNameField, popupJobField, callback){
-    return this._api.updateUserInfo(popupNameField.value, popupJobField.value)
-    .then((res) => {
-      this._profileName.textContent = res.name;
-      this._profileJobInfo.textContent = res.about;
-      callback();
-    })
+setUserInfo({name, about, _id}){
+  this.profileName.textContent = name;
+  this.profileJobInfo.textContent = about;
+  this.id = _id;
   }
+
+setUserAvatar({avatar}){
+  this.profileAvatar.src = avatar;
+}
 }

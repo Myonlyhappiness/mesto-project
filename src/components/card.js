@@ -1,6 +1,4 @@
-import {renderLoading} from '../components/utils.js'
-
-class Card {
+export default class Card {
   constructor(userInfo, addedCard, selector, api, handleCardClick, handleDeleteIconClick){
     this._userInfo = userInfo;
     this._addedCard = addedCard;
@@ -74,7 +72,6 @@ class Card {
     }
   }
 }
-export {Card}
 
 
 
