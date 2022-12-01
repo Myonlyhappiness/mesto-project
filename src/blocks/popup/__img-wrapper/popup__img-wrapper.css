@@ -11,6 +11,6 @@
 
 @media screen and (max-width: 500px) {
   .popup__img-wrapper {
-    margin: auto 40px;
+    margin: auto 10px;
   }
 }

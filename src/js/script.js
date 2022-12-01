@@ -36,7 +36,6 @@ const renderItem = new Section (cards, (item, userInfo) => {
 
 })
 
-
 //Вызов методов
 popupWithImage.setEventListeners();
 popupEditAvatar.setEventListeners();
@@ -47,11 +46,11 @@ validateformAvatar.enableValidation();
 validateformEditProfile.enableValidation();
 validateformAddCard.enableValidation();
 
-
 // Получение данных пользователя (id) и отрисовка карточек
 Promise.all([api.getUserInfo(), api.getInitialCards()])
 .then(([userInfo, initialCards]) => {
   userInformation.setUserInfo(userInfo);
+  userInformation.setUserAvatar(userInfo);
   renderItem.initialCardsRenderer(initialCards, userInfo);
 })
 .catch(error => console.log(error))
@@ -107,7 +106,7 @@ function updateAvatar(event) {
   renderLoading(true, submitButtonText);
   api.updateUserAvatar(formUpdateAvatarLink.value)
   .then((userInfo) => {
-    userInformation.setUserInfo(userInfo);
+    userInformation.setUserAvatar(userInfo);
     this.close();
   })
   .catch(error => console.log(error))
