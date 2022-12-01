@@ -42,6 +42,7 @@ popupWithImage.setEventListeners();
 popupEditAvatar.setEventListeners();
 popupEditProfile.setEventListeners();
 popupAddNewCard.setEventListeners();
+popupDeleteCard.setEventListeners();
 validateformAvatar.enableValidation();
 validateformEditProfile.enableValidation();
 validateformAddCard.enableValidation();
@@ -62,8 +63,7 @@ function editProfile(event) {
   renderLoading(true, submitButtonText);
   api.updateUserInfo(popupNameField.value, popupJobField.value)
   .then((userInfo) => {
-  profileName.textContent = userInfo.name;
-  profileJobInfo.textContent = userInfo.about;
+    userInformation.setUserInfo(userInfo);
   this.close()
 })
   .catch(error => console.log(error))
@@ -107,7 +107,7 @@ function updateAvatar(event) {
   renderLoading(true, submitButtonText);
   api.updateUserAvatar(formUpdateAvatarLink.value)
   .then((userInfo) => {
-    profileAvatar.src = userInfo.avatar;
+    userInformation.setUserInfo(userInfo);
     this.close();
   })
   .catch(error => console.log(error))
@@ -126,12 +126,10 @@ profileAddButton.addEventListener("click", () => {
 
 profileEditButton.addEventListener("click", () => {
   validateformEditProfile.resetInputsErrors();
-  api.getUserInfo().then((userInfo) => {
-    popupNameField.value = userInfo.name;
-    popupJobField.value = userInfo.about;
+    const userData = userInformation.getUserInfo();
+    popupNameField.value = userData.profileName.textContent;
+    popupJobField.value = userData.profileJobInfo.textContent;
     popupEditProfile.open();
-})
-.catch(error => console.log(error));
   })
 
 

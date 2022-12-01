@@ -12,7 +12,10 @@ export default class PopupDeleteCard extends Popup{
   setSubmitHandler(cardId, card){
   this.cardId = cardId;
   this.card = card;
-   this.setEventListeners();
+  }
+
+  setEventListeners(){
+    super.setEventListeners();
     this.popupDeleteCardButton.addEventListener("click", this._formCallback);
   }
   }
