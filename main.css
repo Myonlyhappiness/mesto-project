@@ -38,7 +38,7 @@ html{-webkit-text-size-adjust:100%;line-height:1.15}body{margin:0}main{display:b
 .card_liked{background:url(35948469632d0421d697.svg) no-repeat;opacity:1}.card_liked:hover{opacity:1}
 .card__delete-icon{background:url(e3c42771bff3aaa52f76.svg) 50% no-repeat;background-color:transparent;border:none;cursor:pointer;display:block;height:20px;position:absolute;right:20px;top:20px;transition:opacity .2s linear;width:18px}.card__delete-icon:hover{cursor:pointer;opacity:.6}
 .popup-img{background-color:rgba(0,0,0,.9)}
-.popup__img-wrapper{margin:auto;position:relative}@media screen and (max-width:760px){.popup__img-wrapper{margin:auto 100px}}@media screen and (max-width:500px){.popup__img-wrapper{margin:auto 40px}}
+.popup__img-wrapper{margin:auto;position:relative}@media screen and (max-width:760px){.popup__img-wrapper{margin:auto 100px}}@media screen and (max-width:500px){.popup__img-wrapper{margin:auto 10px}}
 .popup__img-elem{display:block;max-height:75vh;max-width:75vh;width:100%}
 .popup__img-caption{bottom:-35px;font-size:12px;font-weight:400;left:0;line-height:1.2;position:absolute}
 .popup-delete-card__button{margin-top:0}
